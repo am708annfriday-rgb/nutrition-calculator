@@ -1,3 +1,5 @@
+const EMPTY_PRODUCT_ID = "";
+
 const products = [
   {
     id: "enteral-hine-e-gel",
@@ -257,8 +259,8 @@ const initialRows = [
   { productId: "enteral-racol", dailyMl: 400, rateMlPerHour: "", hoursPerDay: "" },
   { productId: "pn-glucose-20", dailyMl: 250, rateMlPerHour: "", hoursPerDay: "" },
   { productId: "pn-amiparen", dailyMl: 200, rateMlPerHour: "", hoursPerDay: "" },
-  { productId: "pn-intralipos-20", dailyMl: "", rateMlPerHour: "", hoursPerDay: "" },
-  { productId: "enteral-meibalance-mini", dailyMl: "", rateMlPerHour: "", hoursPerDay: "" }
+  { productId: EMPTY_PRODUCT_ID, dailyMl: "", rateMlPerHour: "", hoursPerDay: "" },
+  { productId: EMPTY_PRODUCT_ID, dailyMl: "", rateMlPerHour: "", hoursPerDay: "" }
 ];
 
 function cloneRows(value) {
@@ -292,7 +294,11 @@ function formatNumber(value, digits = 1) {
 }
 
 function getProduct(productId) {
-  return products.find((product) => product.id === productId) ?? products[0];
+  if (!productId) {
+    return null;
+  }
+
+  return products.find((product) => product.id === productId) ?? null;
 }
 
 function getCalculatedVolume(row) {
@@ -313,6 +319,19 @@ function getCalculatedVolume(row) {
 
 function calculateRow(row) {
   const product = getProduct(row.productId);
+  if (!product) {
+    return {
+      product: null,
+      volumeMl: 0,
+      kcal: 0,
+      protein: 0,
+      fat: 0,
+      carb: 0,
+      nitrogen: 0,
+      npc: 0
+    };
+  }
+
   const volumeMl = getCalculatedVolume(row);
   const kcal = volumeMl * product.kcalPerMl;
   const protein = volumeMl * product.proteinPerMl;
@@ -352,8 +371,11 @@ function getTotals() {
 
 function createProductOptions(selectedId) {
   const groups = [...new Set(products.map((product) => product.category))];
+  const emptySelected = selectedId === EMPTY_PRODUCT_ID ? "selected" : "";
 
-  return groups
+  return [`<option value="${EMPTY_PRODUCT_ID}" ${emptySelected}>未選択</option>`]
+    .concat(
+      groups
     .map((group) => {
       const options = products
         .filter((product) => product.category === group)
@@ -365,6 +387,7 @@ function createProductOptions(selectedId) {
 
       return `<optgroup label="${group}">${options}</optgroup>`;
     })
+    )
     .join("");
 }
 
@@ -372,15 +395,17 @@ function renderRows() {
   elements.lineItems.innerHTML = rows
     .map((row, index) => {
       const result = calculateRow(row);
+      const productMeta = result.product ? `${result.product.note}<br>${result.product.source}` : "この枠は集計対象外です";
+      const category = result.product ? result.product.category : "未選択";
       return `
         <tr data-row="${index}">
           <td>
             <select data-index="${index}" data-field="productId">
               ${createProductOptions(row.productId)}
             </select>
-            <small data-cell="productMeta">${result.product.note}<br>${result.product.source}</small>
+            <small data-cell="productMeta">${productMeta}</small>
           </td>
-          <td><span class="pill" data-cell="category">${result.product.category}</span></td>
+          <td><span class="pill" data-cell="category">${category}</span></td>
           <td><input type="number" min="0" step="1" value="${row.dailyMl}" data-index="${index}" data-field="dailyMl"></td>
           <td><input type="number" min="0" step="0.1" value="${row.rateMlPerHour}" data-index="${index}" data-field="rateMlPerHour"></td>
           <td><input type="number" min="0" step="0.1" value="${row.hoursPerDay}" data-index="${index}" data-field="hoursPerDay"></td>
@@ -400,14 +425,16 @@ function renderMobileRows() {
   elements.mobileItems.innerHTML = rows
     .map((row, index) => {
       const result = calculateRow(row);
+      const productMeta = result.product ? `${result.product.note} ・ ${result.product.source}` : "未選択の枠です";
+      const category = result.product ? result.product.category : "未選択";
       return `
-        <article class="mobile-card" data-mobile-row="${index}">
+        <article class="mobile-card ${result.product ? "" : "mobile-card-empty"}" data-mobile-row="${index}">
           <div class="mobile-card-header">
             <div class="mobile-card-title">
               <h3>${index + 1}枠目</h3>
-              <p class="mobile-card-meta" data-mobile-cell="productMeta">${result.product.note} ・ ${result.product.source}</p>
+              <p class="mobile-card-meta" data-mobile-cell="productMeta">${productMeta}</p>
             </div>
-            <span class="pill" data-mobile-cell="category">${result.product.category}</span>
+            <span class="pill" data-mobile-cell="category">${category}</span>
           </div>
           <div class="mobile-form-grid">
             <div class="mobile-field mobile-field-full">
@@ -449,12 +476,15 @@ function renderMobileRows() {
 function refreshRow(index) {
   const rowElement = elements.lineItems.querySelector(`[data-row="${index}"]`);
   const result = calculateRow(rows[index]);
+  const desktopMeta = result.product ? `${result.product.note}<br>${result.product.source}` : "この枠は集計対象外です";
+  const mobileMeta = result.product ? `${result.product.note} ・ ${result.product.source}` : "未選択の枠です";
+  const category = result.product ? result.product.category : "未選択";
   const updates = {
     productMeta: {
-      desktop: `${result.product.note}<br>${result.product.source}`,
-      mobile: `${result.product.note} ・ ${result.product.source}`
+      desktop: desktopMeta,
+      mobile: mobileMeta
     },
-    category: { desktop: result.product.category, mobile: result.product.category },
+    category: { desktop: category, mobile: category },
     volume: { desktop: `${formatNumber(result.volumeMl, 1)} mL`, mobile: `${formatNumber(result.volumeMl, 1)} mL` },
     kcal: { desktop: formatNumber(result.kcal, 1), mobile: formatNumber(result.kcal, 1) },
     protein: { desktop: formatNumber(result.protein, 2), mobile: formatNumber(result.protein, 2) },
@@ -474,6 +504,7 @@ function refreshRow(index) {
 
   const mobileRowElement = elements.mobileItems.querySelector(`[data-mobile-row="${index}"]`);
   if (mobileRowElement) {
+    mobileRowElement.classList.toggle("mobile-card-empty", !result.product);
     Object.entries(updates).forEach(([name, value]) => {
       const element = mobileRowElement.querySelector(`[data-mobile-cell="${name}"]`);
       if (element) {
