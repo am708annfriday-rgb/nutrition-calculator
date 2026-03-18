@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#1d7c63" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="栄養計算" />
+    <meta name="description" content="経腸栄養・静脈栄養の総カロリーやタンパク量、NPC/Nを計算するツール" />
+    <title>栄養計算プロトタイプ</title>
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="hero">
+        <p class="eyebrow">Nutrition Prototype</p>
+        <h1>経腸栄養・静脈栄養 計算ツール</h1>
+        <p class="lead">
+          薬剤名を選び、<code>mL/日</code> または <code>mL/h × 投与時間</code> を入力すると、
+          総カロリー、タンパク量、脂質、糖質、窒素量、NPC/N を集計します。
+        </p>
+        <div class="notice">
+          <strong>注意:</strong>
+          この試作版の製品マスタは PDF をもとに手入力したサンプルです。臨床利用前に必ず院内採用品目・最新添付文書・製品資料で確認してください。
+        </div>
+        <div class="install-panel" id="installPanel">
+          <div>
+            <h2>スマホで使う</h2>
+            <p class="section-copy">
+              Android は「インストール」、iPhone は共有メニューから「ホーム画面に追加」でアプリのように使えます。
+            </p>
+          </div>
+          <div class="button-row install-actions">
+            <button id="installButton" type="button" hidden>ホーム画面に追加</button>
+            <p id="installHint" class="install-hint">
+              iPhone: Safariの共有ボタンから「ホーム画面に追加」
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="summary-grid" id="summaryCards"></section>
+
+      <section class="panel controls">
+        <div>
+          <h2>入力</h2>
+          <p class="section-copy">
+            5枠固定で、経腸栄養剤・糖液・アミノ酸製剤・脂肪乳剤を組み合わせて計算できます。
+          </p>
+        </div>
+        <div class="button-row">
+          <button id="resetButton" type="button" class="button-secondary">初期状態に戻す</button>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="mobile-stack" id="mobileItems"></div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>製品</th>
+                <th>区分</th>
+                <th>mL/日</th>
+                <th>mL/h</th>
+                <th>時間/日</th>
+                <th>計算量</th>
+                <th>kcal</th>
+                <th>蛋白 g</th>
+                <th>脂質 g</th>
+                <th>糖質 g</th>
+                <th>N g</th>
+              </tr>
+            </thead>
+            <tbody id="lineItems"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="panel result-panel">
+        <h2>集計</h2>
+        <div class="result-grid" id="resultGrid"></div>
+      </section>
+
+      <section class="panel">
+        <h2>搭載サンプル製品</h2>
+        <p class="section-copy">
+          初期搭載は代表製品のみです。データを増やすと、ほぼそのまま実運用用マスタに拡張できます。
+        </p>
+        <div class="master-list" id="masterList"></div>
+      </section>
+    </main>
+
+    <script src="./app.js"></script>
+  </body>
+</html>

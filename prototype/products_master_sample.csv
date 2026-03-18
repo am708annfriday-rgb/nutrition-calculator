@@ -1,0 +1,22 @@
+id,name,category,kcal_per_ml,protein_per_ml,fat_per_ml,carb_per_ml,nitrogen_per_ml,source,note
+enteral-hine-e-gel,ハイネイーゲル,経腸栄養,1,0.06,0.015,0.071,0.0096,PDF p.7,400kcal/400mL
+enteral-standard-bag,スタンダードバッグ,経腸栄養,1.5,0.0525,0.03,0.1875,0.0084,PDF p.7,300kcal/200mL
+enteral-peptamen-af,ペプタメンAF,経腸栄養,1.5,0.095,0.066,0.132,0.0152,PDF p.7,300kcal/200mL
+enteral-peptamen-intense,ペプタメン インテンス,経腸栄養,1,0.092,0.037,0.075,0.0147,PDF p.6,200kcal/200mL
+enteral-enevo,エネーボ,経腸栄養,1.6,0.064,0.0517,0.2283,0.0102,PDF p.8,300kcal/187.5mL
+enteral-racol,ラコールNF 1.0,経腸栄養,1,0.04,0.03,0.15,0.0064,PDF p.9,400kcal/400mL
+enteral-terumeal-mini,テルミールミニ,経腸栄養,1.6,0.0584,0.048,0.208,0.0093,PDF p.10,200kcal/125mL
+enteral-isocal-100,アイソカル100,経腸栄養,2,0.08,0.08,0.255,0.0128,PDF p.10,200kcal/100mL
+enteral-meibalance-mini,メイバランス ぎゅっとMini,経腸栄養,1.6,0.06,0.0448,0.2576,0.0096,PDF p.10,200kcal/125mL
+enteral-renalen-lp,リーナレンLP,経腸栄養,1.6,0.016,0.0448,0.2944,0.0026,PDF p.11,200kcal/125mL
+enteral-renalen-mp,リーナレンMP,経腸栄養,1.6,0.056,0.0448,0.2512,0.009,PDF p.11,200kcal/125mL
+pn-glucose-5,ブドウ糖液 5%,静脈栄養,0.2,0,0,0.05,0,PDF p.1,20kcal/100mL
+pn-glucose-10,ブドウ糖液 10%,静脈栄養,0.4,0,0,0.1,0,PDF p.1,40kcal/100mL
+pn-glucose-20,ブドウ糖液 20%,静脈栄養,0.8,0,0,0.2,0,PDF p.1,80kcal/100mL
+pn-glucose-40,ブドウ糖液 40%,静脈栄養,1.6,0,0,0.4,0,PDF p.1,160kcal/100mL
+pn-glucose-50,ブドウ糖液 50%,静脈栄養,2,0,0,0.5,0,PDF p.1,200kcal/100mL
+pn-amiparen,アミパレン輸液,静脈栄養,0.4,0.0978,0,0,0.01565,PDF p.2,窒素15.65g/L・熱量400kcal/L
+pn-aminoleban,アミノレバン点滴静注,静脈栄養,0.3194,0.0764,0,0,0.01222,PDF p.2,窒素12.22g/L・熱量319.4kcal/L
+pn-kidomin,キドミン輸液,静脈栄養,0.2882,0.0625,0,0,0.01,PDF p.2,窒素10g/L・熱量288.2kcal/L
+pn-intralipos-10,イントラリポス輸液 10%,静脈栄養,1.1,0,0.1,0,0,PDF p.2,約275kcal/250mL
+pn-intralipos-20,イントラリポス輸液 20%,静脈栄養,2,0,0.2,0,0,PDF p.2,約500kcal/250mL
