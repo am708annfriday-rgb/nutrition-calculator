@@ -432,6 +432,27 @@ function getUnitLabel(unit) {
   return "回/日";
 }
 
+function buildProductMeta(product) {
+  if (!product) {
+    return "未選択の枠です";
+  }
+
+  const packageMl = product.packageMl || 0;
+  const packageKcal = packageMl * (product.kcalPerMl || 0);
+  const packageProtein = packageMl * (product.proteinPerMl || 0);
+  const packageFat = packageMl * (product.fatPerMl || 0);
+  const packageCarb = packageMl * (product.carbPerMl || 0);
+
+  return [
+    `1規格 ${formatNumber(packageMl, 0)}mL`,
+    `${formatNumber(packageKcal, 1)}kcal`,
+    `糖質 ${formatNumber(packageCarb, 1)}g`,
+    `タンパク質 ${formatNumber(packageProtein, 1)}g`,
+    `脂質 ${formatNumber(packageFat, 1)}g`,
+    product.note
+  ].join(" / ");
+}
+
 function createOptions(group, selectedId) {
   const emptySelected = selectedId === EMPTY_PRODUCT_ID ? "selected" : "";
   const groupProducts = products.filter((product) => product.group === group);
@@ -505,8 +526,7 @@ function renderSlots(group) {
     .map((row, index) => {
       const result = calculateRow(row);
       const product = result.product;
-      const meta = product ? product.note : "未選択の枠です";
-      const name = product ? product.name : "未選択";
+      const meta = buildProductMeta(product);
       const showInputs = Boolean(product);
       return `
         <article class="slot-card" data-group="${group}" data-index="${index}">
@@ -671,7 +691,7 @@ function refreshSlotCard(group, index) {
 
   const result = calculateRow(row);
   const product = result.product;
-  const meta = product ? product.note : "未選択の枠です";
+  const meta = buildProductMeta(product);
   const badge = card.querySelector('[data-cell="badge"]');
   const metaNode = card.querySelector('[data-cell="meta"]');
   const volume = card.querySelector('[data-cell="volume"]');
