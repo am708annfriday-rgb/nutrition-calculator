@@ -2,6 +2,18 @@ const EMPTY_PRODUCT_ID = "";
 
 const products = [
   {
+    id: "enteral-peptamen-standard",
+    name: "ペプタメンスタンダード",
+    group: "EN",
+    packageMl: 200,
+    kcalPerMl: 1.5,
+    proteinPerMl: 10.5 / 200,
+    fatPerMl: 12 / 200,
+    carbPerMl: 37.5 / 200,
+    nitrogenPerMl: 10.5 / 6.25 / 200,
+    note: "添付資料: 300kcal/200mL"
+  },
+  {
     id: "enteral-peptamen-af",
     name: "ペプタメンAF",
     group: "EN",
@@ -74,6 +86,42 @@ const products = [
     note: "PDF掲載: 200kcal/125mL"
   },
   {
+    id: "pn-glucose-5",
+    name: "ブドウ糖5%",
+    group: "PN",
+    packageMl: 500,
+    kcalPerMl: 0.2,
+    proteinPerMl: 0,
+    fatPerMl: 0,
+    carbPerMl: 0.05,
+    nitrogenPerMl: 0,
+    note: "添付文書: 100kcal/500mL"
+  },
+  {
+    id: "pn-glucose-10",
+    name: "ブドウ糖10%",
+    group: "PN",
+    packageMl: 500,
+    kcalPerMl: 0.4,
+    proteinPerMl: 0,
+    fatPerMl: 0,
+    carbPerMl: 0.1,
+    nitrogenPerMl: 0,
+    note: "添付文書: 200kcal/500mL"
+  },
+  {
+    id: "pn-glucose-30",
+    name: "ブドウ糖30%",
+    group: "PN",
+    packageMl: 200,
+    kcalPerMl: 1.2,
+    proteinPerMl: 0,
+    fatPerMl: 0,
+    carbPerMl: 0.3,
+    nitrogenPerMl: 0,
+    note: "濃度換算: 30g/100mL"
+  },
+  {
     id: "pn-elneopa-1",
     name: "エルネオパNF 1号輸液",
     group: "PN",
@@ -96,6 +144,30 @@ const products = [
     carbPerMl: 0.175,
     nitrogenPerMl: 0.0047,
     note: "PDF掲載: 820kcal/1000mL"
+  },
+  {
+    id: "pn-amiparen",
+    name: "アミパレン輸液",
+    group: "PN",
+    packageMl: 200,
+    kcalPerMl: 0.4,
+    proteinPerMl: 0.0978,
+    fatPerMl: 0,
+    carbPerMl: (0.4 - 0.0978 * 4) / 4,
+    nitrogenPerMl: 0.01565,
+    note: "PDF掲載: 400kcal/L"
+  },
+  {
+    id: "pn-kidoparen",
+    name: "キドパレン輸液",
+    group: "PN",
+    packageMl: 1050,
+    kcalPerMl: 1500 / 1050,
+    proteinPerMl: 32.847 / 1050,
+    fatPerMl: 0,
+    carbPerMl: 342.2 / 1050,
+    nitrogenPerMl: 4.56 / 1050,
+    note: "添付文書: 1050mL中 総遊離アミノ酸32.847g・総熱量1500kcal"
   },
   {
     id: "pn-fulkalic-1",
@@ -186,8 +258,7 @@ const products = [
 const defaultRow = {
   productId: EMPTY_PRODUCT_ID,
   amount: "",
-  unit: "ml_h",
-  hours: "24"
+  unit: "ml_h"
 };
 
 const state = {
@@ -199,8 +270,8 @@ const state = {
   urineUN: ""
 };
 
-state.enRows[0] = { productId: "enteral-peptamen-af", amount: "20", unit: "ml_h", hours: "24" };
-state.pnRows[0] = { productId: "pn-elneopa-2", amount: "20", unit: "ml_h", hours: "24" };
+state.enRows[0] = { productId: "enteral-peptamen-af", amount: "20", unit: "ml_h" };
+state.pnRows[0] = { productId: "pn-elneopa-2", amount: "20", unit: "ml_h" };
 
 const elements = {
   enSlots: document.querySelector("#enSlots"),
@@ -260,14 +331,13 @@ function getDailyVolume(row, product) {
   }
 
   const amount = Number(row.amount) || 0;
-  const hours = Number(row.hours) || 0;
 
   if (row.unit === "ml_day") {
     return amount;
   }
 
   if (row.unit === "ml_h") {
-    return amount * hours;
+    return amount * 24;
   }
 
   return amount * (product.packageMl || 0);
@@ -280,11 +350,11 @@ function calculateRow(row) {
   }
 
   const volumeMl = getDailyVolume(row, product);
-  const kcal = volumeMl * product.kcalPerMl;
   const protein = volumeMl * product.proteinPerMl;
   const fat = volumeMl * product.fatPerMl;
   const carb = volumeMl * product.carbPerMl;
   const nitrogen = volumeMl * product.nitrogenPerMl;
+  const kcal = protein * 4 + fat * 9 + carb * 4;
   const npc = kcal - protein * 4;
 
   return { product, volumeMl, kcal, protein, fat, carb, nitrogen, npc };
@@ -316,6 +386,8 @@ function renderSlots(group) {
       const result = calculateRow(row);
       const product = result.product;
       const meta = product ? product.note : "未選択の枠です";
+      const name = product ? product.name : "未選択";
+      const showInputs = Boolean(product);
       return `
         <article class="slot-card" data-group="${group}" data-index="${index}">
           <div class="slot-header">
@@ -325,7 +397,9 @@ function renderSlots(group) {
           <select class="slot-select" data-group="${group}" data-index="${index}" data-field="productId">
             ${createOptions(group, row.productId)}
           </select>
+          <h3 class="slot-product-name" data-cell="name">${name}</h3>
           <p class="slot-meta" data-cell="meta">${meta}</p>
+          <div class="${showInputs ? "" : "hidden"}" data-input-area>
           <div class="dose-row">
             <input
               class="dose-input"
@@ -345,24 +419,11 @@ function renderSlots(group) {
               <option value="times_day" ${row.unit === "times_day" ? "selected" : ""}>回/日</option>
             </select>
           </div>
-          <div class="extra-row ${row.unit === "ml_h" ? "" : "hidden"}" data-hours-row>
-            <input
-              class="hours-input"
-              type="number"
-              min="0"
-              step="0.1"
-              inputmode="decimal"
-              placeholder="投与時間 / 日"
-              value="${row.hours}"
-              data-group="${group}"
-              data-index="${index}"
-              data-field="hours"
-            />
-          </div>
           <div class="slot-foot">
             <div class="mini-metric"><span>容量</span><strong data-cell="volume">${formatNumber(result.volumeMl, 0)} mL</strong></div>
             <div class="mini-metric"><span>kcal</span><strong data-cell="kcal">${formatNumber(result.kcal, 1)}</strong></div>
             <div class="mini-metric"><span>タンパク質</span><strong data-cell="protein">${formatNumber(result.protein, 1)} g</strong></div>
+          </div>
           </div>
         </article>
       `;
@@ -492,20 +553,23 @@ function refreshSlotCard(group, index) {
   const result = calculateRow(row);
   const product = result.product;
   const meta = product ? product.note : "未選択の枠です";
+  const name = product ? product.name : "未選択";
 
   const badge = card.querySelector('[data-cell="badge"]');
+  const nameNode = card.querySelector('[data-cell="name"]');
   const metaNode = card.querySelector('[data-cell="meta"]');
   const volume = card.querySelector('[data-cell="volume"]');
   const kcal = card.querySelector('[data-cell="kcal"]');
   const protein = card.querySelector('[data-cell="protein"]');
-  const hoursRow = card.querySelector("[data-hours-row]");
+  const inputArea = card.querySelector("[data-input-area]");
 
   if (badge) badge.textContent = product ? getUnitLabel(row.unit) : "未選択";
+  if (nameNode) nameNode.textContent = name;
   if (metaNode) metaNode.textContent = meta;
   if (volume) volume.textContent = `${formatNumber(result.volumeMl, 0)} mL`;
   if (kcal) kcal.textContent = formatNumber(result.kcal, 1);
   if (protein) protein.textContent = `${formatNumber(result.protein, 1)} g`;
-  if (hoursRow) hoursRow.classList.toggle("hidden", row.unit !== "ml_h");
+  if (inputArea) inputArea.classList.toggle("hidden", !product);
 }
 
 function getRowsByGroup(group) {
