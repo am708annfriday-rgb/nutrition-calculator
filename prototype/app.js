@@ -397,7 +397,6 @@ function renderSlots(group) {
           <select class="slot-select" data-group="${group}" data-index="${index}" data-field="productId">
             ${createOptions(group, row.productId)}
           </select>
-          <h3 class="slot-product-name" data-cell="name">${name}</h3>
           <p class="slot-meta" data-cell="meta">${meta}</p>
           <div class="${showInputs ? "" : "hidden"}" data-input-area>
           <div class="dose-row">
@@ -553,10 +552,7 @@ function refreshSlotCard(group, index) {
   const result = calculateRow(row);
   const product = result.product;
   const meta = product ? product.note : "未選択の枠です";
-  const name = product ? product.name : "未選択";
-
   const badge = card.querySelector('[data-cell="badge"]');
-  const nameNode = card.querySelector('[data-cell="name"]');
   const metaNode = card.querySelector('[data-cell="meta"]');
   const volume = card.querySelector('[data-cell="volume"]');
   const kcal = card.querySelector('[data-cell="kcal"]');
@@ -564,7 +560,6 @@ function refreshSlotCard(group, index) {
   const inputArea = card.querySelector("[data-input-area]");
 
   if (badge) badge.textContent = product ? getUnitLabel(row.unit) : "未選択";
-  if (nameNode) nameNode.textContent = name;
   if (metaNode) metaNode.textContent = meta;
   if (volume) volume.textContent = `${formatNumber(result.volumeMl, 0)} mL`;
   if (kcal) kcal.textContent = formatNumber(result.kcal, 1);
