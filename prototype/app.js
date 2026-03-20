@@ -122,6 +122,102 @@ const products = [
     note: "濃度換算: 30g/100mL"
   },
   {
+    id: "pn-physio-140-500",
+    name: "フィジオ140輸液 500mL",
+    group: "PN",
+    packageMl: 500,
+    kcalPerMl: 40 / 1000,
+    proteinPerMl: 0,
+    fatPerMl: 0,
+    carbPerMl: 10 / 1000,
+    nitrogenPerMl: 0,
+    note: "まとめPDF掲載: G10・40kcal/L"
+  },
+  {
+    id: "pn-lactec-500",
+    name: "ラクテック注 500mL",
+    group: "PN",
+    packageMl: 500,
+    kcalPerMl: 0,
+    proteinPerMl: 0,
+    fatPerMl: 0,
+    carbPerMl: 0,
+    nitrogenPerMl: 0,
+    note: "添付文書: 500mL中 電解質のみ・熱量記載なし"
+  },
+  {
+    id: "pn-solacet-d-500",
+    name: "ソルアセトD輸液 500mL",
+    group: "PN",
+    packageMl: 500,
+    kcalPerMl: 200 / 1000,
+    proteinPerMl: 0,
+    fatPerMl: 0,
+    carbPerMl: 50 / 1000,
+    nitrogenPerMl: 0,
+    note: "まとめPDF掲載: G50・200kcal/L"
+  },
+  {
+    id: "pn-solacet-f-500",
+    name: "ソルアセトF輸液 500mL",
+    group: "PN",
+    packageMl: 500,
+    kcalPerMl: 0,
+    proteinPerMl: 0,
+    fatPerMl: 0,
+    carbPerMl: 0,
+    nitrogenPerMl: 0,
+    note: "添付文書: 500mL中 電解質のみ・熱量記載なし"
+  },
+  {
+    id: "pn-soludem-1-500",
+    name: "ソルデム1輸液 500mL",
+    group: "PN",
+    packageMl: 500,
+    kcalPerMl: 52 / 500,
+    proteinPerMl: 0,
+    fatPerMl: 0,
+    carbPerMl: 13 / 500,
+    nitrogenPerMl: 0,
+    note: "添付文書: 500mL中 ブドウ糖13.0g・52kcal"
+  },
+  {
+    id: "pn-soludem-3a-500",
+    name: "ソルデム3A輸液 500mL",
+    group: "PN",
+    packageMl: 500,
+    kcalPerMl: 86 / 500,
+    proteinPerMl: 0,
+    fatPerMl: 0,
+    carbPerMl: 21.5 / 500,
+    nitrogenPerMl: 0,
+    note: "添付文書: 500mL中 ブドウ糖21.5g・86kcal"
+  },
+  {
+    id: "pn-physio-35-500",
+    name: "フィジオ35輸液 500mL",
+    group: "PN",
+    packageMl: 500,
+    kcalPerMl: 400 / 1000,
+    proteinPerMl: 0,
+    fatPerMl: 0,
+    carbPerMl: 100 / 1000,
+    nitrogenPerMl: 0,
+    note: "まとめPDF掲載: G100・400kcal/L"
+  },
+  {
+    id: "pn-soludem-3ag-500",
+    name: "ソルデム3AG輸液 500mL",
+    group: "PN",
+    packageMl: 500,
+    kcalPerMl: 300 / 1000,
+    proteinPerMl: 0,
+    fatPerMl: 0,
+    carbPerMl: 75 / 1000,
+    nitrogenPerMl: 0,
+    note: "まとめPDF掲載: G75・300kcal/L"
+  },
+  {
     id: "pn-elneopa-1",
     name: "エルネオパNF 1号輸液",
     group: "PN",
@@ -170,6 +266,18 @@ const products = [
     note: "添付文書: 1050mL中 総遊離アミノ酸32.847g・総熱量1500kcal"
   },
   {
+    id: "pn-aminoleban-500",
+    name: "アミノレバン点滴静注 500mL",
+    group: "PN",
+    packageMl: 500,
+    kcalPerMl: 319.4 / 1000,
+    proteinPerMl: 79.86 / 1000,
+    fatPerMl: 0,
+    carbPerMl: 0,
+    nitrogenPerMl: 12.22 / 1000,
+    note: "まとめPDF掲載: 総遊離アミノ酸79.86g/L・319.4kcal/L"
+  },
+  {
     id: "pn-fulkalic-1",
     name: "フルカリック1号輸液",
     group: "PN",
@@ -216,6 +324,18 @@ const products = [
     carbPerMl: 0,
     nitrogenPerMl: 0,
     note: "20% 100mL規格"
+  },
+  {
+    id: "pn-propofol-1-50",
+    name: "プロポフォール1%静注 50mL",
+    group: "PN",
+    packageMl: 50,
+    kcalPerMl: 0.9,
+    proteinPerMl: 0,
+    fatPerMl: 0.1,
+    carbPerMl: 0,
+    nitrogenPerMl: 0,
+    note: "添付文書: 1mLあたり約0.1gの脂質"
   },
   {
     id: "pn-beefreed-500",
