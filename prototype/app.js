@@ -31,23 +31,35 @@ const products = [
     group: "EN",
     packageMl: 400,
     kcalPerMl: 1.0,
-    proteinPerMl: 0.04,
-    fatPerMl: 0.03,
-    carbPerMl: 0.15,
-    nitrogenPerMl: 0.0064,
-    note: "PDF掲載: 400kcal/400mL"
+    proteinPerMl: 17.52 / 400,
+    fatPerMl: 8.92 / 400,
+    carbPerMl: 62.48 / 400,
+    nitrogenPerMl: 2.76 / 400,
+    note: "添付文書: 400mL中 400kcal・たん白質17.52g・脂肪8.92g・糖質62.48g"
   },
   {
     id: "enteral-enevo",
     name: "エネーボ配合経腸用液",
     group: "EN",
-    packageMl: 187.5,
-    kcalPerMl: 1.6,
-    proteinPerMl: 0.064,
-    fatPerMl: 0.0517,
-    carbPerMl: 0.2283,
-    nitrogenPerMl: 0.0102,
-    note: "PDF掲載: 300kcal/187.5mL"
+    packageMl: 250,
+    kcalPerMl: 1.2,
+    proteinPerMl: 13.5 / 250,
+    fatPerMl: 9.6 / 250,
+    carbPerMl: 39.6 / 250,
+    nitrogenPerMl: (13.5 / 6.25) / 250,
+    note: "添付資料: 250mL中 300kcal・たんぱく質13.5g・脂質9.6g・炭水化物39.6g"
+  },
+  {
+    id: "enteral-elental",
+    name: "エレンタール配合内用剤",
+    group: "EN",
+    packageMl: 300,
+    kcalPerMl: 1.0,
+    proteinPerMl: 12.5088 / 300,
+    fatPerMl: 0.509 / 300,
+    carbPerMl: (300 - 12.5088 * 4 - 0.509 * 9) / 4 / 300,
+    nitrogenPerMl: (12.5088 / 6.25) / 300,
+    note: "添付文書: 1包80gを約300mLに調製して300kcal"
   },
   {
     id: "enteral-renalen-mp",
