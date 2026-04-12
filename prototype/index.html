@@ -3,12 +3,15 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#3f76b3" />
+    <meta name="theme-color" content="#0f5c5a" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-    <meta name="apple-mobile-web-app-title" content="栄養計算" />
-    <meta name="description" content="経腸栄養・静脈栄養の総カロリーやタンパク量、NPC/Nを計算するツール" />
-    <title>栄養計算</title>
+    <meta name="apple-mobile-web-app-title" content="ガンマ計算" />
+    <meta
+      name="description"
+      content="体重、成分量、希釈総量、速度または投与量から投与速度や目標投与量を相互に計算するガンマ計算ツール"
+    />
+    <title>ガンマ計算</title>
     <link rel="manifest" href="./manifest.webmanifest" />
     <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png" />
     <link rel="stylesheet" href="./styles.css" />
@@ -16,61 +19,44 @@
   <body>
     <header class="topbar">
       <div class="topbar-inner">
-        <div class="topbar-icon">栄</div>
-        <h1>栄養計算</h1>
+        <div>
+          <h1>γ計算</h1>
+          <p class="eyebrow">薬剤持続投与の指標</p>
+        </div>
       </div>
     </header>
 
     <main class="app-shell">
-      <section class="group-panel">
-        <div class="section-title">経腸栄養剤 (EN)</div>
-        <div class="slot-list" id="enSlots"></div>
-        <div class="summary-card-block">
-          <h2>経腸栄養剤 (EN) 合計値</h2>
-          <div id="enSummary"></div>
+      <section class="hero-card">
+        <div>
+          <p class="hero-lead">速度と投与量を、片側入力でコンパクトに計算します。</p>
+          <p class="hero-copy">
+            薬剤は複数追加できます。標準値をもとに必要時だけ修正してください。
+          </p>
+        </div>
+        <div class="weight-panel">
+          <label class="field-label" for="bodyWeight">体重</label>
+          <div class="input-with-unit">
+            <input id="bodyWeight" type="text" inputmode="decimal" placeholder="50" />
+            <span>kg</span>
+          </div>
         </div>
       </section>
 
-      <section class="group-panel">
-        <div class="section-title">静脈栄養剤 (PN)</div>
-        <div class="slot-list" id="pnSlots"></div>
-        <div class="summary-card-block">
-          <h2>静脈栄養剤 (PN) 合計値</h2>
-          <div id="pnSummary"></div>
+      <section class="board-card">
+        <div class="board-header">
+          <div>
+            <h2>薬剤設定</h2>
+            <p>薬剤を追加して、選択したものだけを表示します。</p>
+          </div>
+          <button id="addDrugButton" class="primary-button" type="button">薬剤を追加</button>
         </div>
+        <div id="drugCards" class="drug-card-list"></div>
       </section>
 
-      <section class="group-panel">
-        <div class="section-title">計算結果</div>
-        <div class="summary-card-block">
-          <h2>経腸栄養 + 静脈栄養 合計値</h2>
-          <div id="totalSummary"></div>
-        </div>
-      </section>
-
-      <section class="group-panel">
-        <div class="section-title">体重入力</div>
-        <div class="weight-card">
-          <label class="field-label" for="bodyWeight">体重 (kg)</label>
-          <input id="bodyWeight" type="number" min="0" step="0.1" inputmode="decimal" placeholder="例: 50" />
-        </div>
-        <div class="summary-card-block">
-          <h2>/kg 計算</h2>
-          <div id="perKgSummary"></div>
-        </div>
-      </section>
-
-      <section class="group-panel">
-        <div class="section-title">追加計算</div>
-        <div class="weight-card">
-          <label class="field-label" for="advancedMode">表示項目</label>
-          <select id="advancedMode">
-            <option value="none">表示しない</option>
-            <option value="npcn">NPC/N</option>
-            <option value="nitrogen-balance">窒素バランス計算</option>
-          </select>
-        </div>
-        <div id="advancedPanel"></div>
+      <section class="notice-card">
+        <h2>注意</h2>
+        <p>表示値は参考計算です。最終判断は添付文書、院内運用、患者状態に基づいて行ってください。</p>
       </section>
     </main>
 

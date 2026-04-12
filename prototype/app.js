@@ -1,821 +1,579 @@
-const EMPTY_PRODUCT_ID = "";
+const EMPTY_DRUG_ID = "";
 
-const products = [
-  {
-    id: "enteral-peptamen-standard",
-    name: "ペプタメンスタンダード",
-    group: "EN",
-    packageMl: 200,
-    kcalPerMl: 1.5,
-    proteinPerMl: 10.5 / 200,
-    fatPerMl: 12 / 200,
-    carbPerMl: 37.5 / 200,
-    nitrogenPerMl: 10.5 / 6.25 / 200,
-    note: "添付資料: 300kcal/200mL"
-  },
-  {
-    id: "enteral-peptamen-af",
-    name: "ペプタメンAF",
-    group: "EN",
-    packageMl: 200,
-    kcalPerMl: 1.5,
-    proteinPerMl: 0.095,
-    fatPerMl: 0.066,
-    carbPerMl: 0.132,
-    nitrogenPerMl: 0.0152,
-    note: "PDF掲載: 300kcal/200mL"
-  },
-  {
-    id: "enteral-racol",
-    name: "ラコールNF 配合経腸用液",
-    group: "EN",
-    packageMl: 400,
-    kcalPerMl: 1.0,
-    proteinPerMl: 17.52 / 400,
-    fatPerMl: 8.92 / 400,
-    carbPerMl: 62.48 / 400,
-    nitrogenPerMl: 2.76 / 400,
-    note: "添付文書: 400mL中 400kcal・たん白質17.52g・脂肪8.92g・糖質62.48g"
-  },
-  {
-    id: "enteral-enevo",
-    name: "エネーボ配合経腸用液",
-    group: "EN",
-    packageMl: 250,
-    kcalPerMl: 1.2,
-    proteinPerMl: 13.5 / 250,
-    fatPerMl: 9.6 / 250,
-    carbPerMl: 39.6 / 250,
-    nitrogenPerMl: (13.5 / 6.25) / 250,
-    note: "添付資料: 250mL中 300kcal・たんぱく質13.5g・脂質9.6g・炭水化物39.6g"
-  },
-  {
-    id: "enteral-elental",
-    name: "エレンタール配合内用剤",
-    group: "EN",
-    packageMl: 300,
-    kcalPerMl: 1.0,
-    proteinPerMl: 12.5088 / 300,
-    fatPerMl: 0.509 / 300,
-    carbPerMl: (300 - 12.5088 * 4 - 0.509 * 9) / 4 / 300,
-    nitrogenPerMl: (12.5088 / 6.25) / 300,
-    note: "添付文書: 1包80gを約300mLに調製して300kcal"
-  },
-  {
-    id: "enteral-renalen-mp",
-    name: "明治リーナレンMP",
-    group: "EN",
-    packageMl: 125,
-    kcalPerMl: 1.6,
-    proteinPerMl: 0.056,
-    fatPerMl: 0.0448,
-    carbPerMl: 0.2512,
-    nitrogenPerMl: 0.009,
-    note: "PDF掲載: 200kcal/125mL"
-  },
-  {
-    id: "enteral-hine-e-gel",
-    name: "ハイネイーゲル",
-    group: "EN",
-    packageMl: 400,
-    kcalPerMl: 1.0,
-    proteinPerMl: 0.06,
-    fatPerMl: 0.015,
-    carbPerMl: 0.071,
-    nitrogenPerMl: 0.0096,
-    note: "PDF掲載: 400kcal/400mL"
-  },
-  {
-    id: "enteral-meibalance-mini",
-    name: "明治メイバランスHP1.0Zパック",
-    group: "EN",
-    packageMl: 125,
-    kcalPerMl: 1.6,
-    proteinPerMl: 0.06,
-    fatPerMl: 0.0448,
-    carbPerMl: 0.2576,
-    nitrogenPerMl: 0.0096,
-    note: "PDF掲載: 200kcal/125mL"
-  },
-  {
-    id: "pn-glucose-5",
-    name: "ブドウ糖5%",
-    group: "PN",
-    packageMl: 500,
-    kcalPerMl: 0.2,
-    proteinPerMl: 0,
-    fatPerMl: 0,
-    carbPerMl: 0.05,
-    nitrogenPerMl: 0,
-    note: "添付文書: 100kcal/500mL"
-  },
-  {
-    id: "pn-glucose-10",
-    name: "ブドウ糖10%",
-    group: "PN",
-    packageMl: 500,
-    kcalPerMl: 0.4,
-    proteinPerMl: 0,
-    fatPerMl: 0,
-    carbPerMl: 0.1,
-    nitrogenPerMl: 0,
-    note: "添付文書: 200kcal/500mL"
-  },
-  {
-    id: "pn-glucose-30",
-    name: "ブドウ糖30%",
-    group: "PN",
-    packageMl: 200,
-    kcalPerMl: 1.2,
-    proteinPerMl: 0,
-    fatPerMl: 0,
-    carbPerMl: 0.3,
-    nitrogenPerMl: 0,
-    note: "濃度換算: 30g/100mL"
-  },
-  {
-    id: "pn-physio-140-500",
-    name: "フィジオ140輸液 500mL",
-    group: "PN",
-    packageMl: 500,
-    kcalPerMl: 40 / 1000,
-    proteinPerMl: 0,
-    fatPerMl: 0,
-    carbPerMl: 10 / 1000,
-    nitrogenPerMl: 0,
-    note: "まとめPDF掲載: G10・40kcal/L"
-  },
-  {
-    id: "pn-lactec-500",
-    name: "ラクテック注 500mL",
-    group: "PN",
-    packageMl: 500,
-    kcalPerMl: 0,
-    proteinPerMl: 0,
-    fatPerMl: 0,
-    carbPerMl: 0,
-    nitrogenPerMl: 0,
-    note: "添付文書: 500mL中 電解質のみ・熱量記載なし"
-  },
-  {
-    id: "pn-solacet-d-500",
-    name: "ソルアセトD輸液 500mL",
-    group: "PN",
-    packageMl: 500,
-    kcalPerMl: 200 / 1000,
-    proteinPerMl: 0,
-    fatPerMl: 0,
-    carbPerMl: 50 / 1000,
-    nitrogenPerMl: 0,
-    note: "まとめPDF掲載: G50・200kcal/L"
-  },
-  {
-    id: "pn-solacet-f-500",
-    name: "ソルアセトF輸液 500mL",
-    group: "PN",
-    packageMl: 500,
-    kcalPerMl: 0,
-    proteinPerMl: 0,
-    fatPerMl: 0,
-    carbPerMl: 0,
-    nitrogenPerMl: 0,
-    note: "添付文書: 500mL中 電解質のみ・熱量記載なし"
-  },
-  {
-    id: "pn-soludem-1-500",
-    name: "ソルデム1輸液 500mL",
-    group: "PN",
-    packageMl: 500,
-    kcalPerMl: 52 / 500,
-    proteinPerMl: 0,
-    fatPerMl: 0,
-    carbPerMl: 13 / 500,
-    nitrogenPerMl: 0,
-    note: "添付文書: 500mL中 ブドウ糖13.0g・52kcal"
-  },
-  {
-    id: "pn-soludem-3a-500",
-    name: "ソルデム3A輸液 500mL",
-    group: "PN",
-    packageMl: 500,
-    kcalPerMl: 86 / 500,
-    proteinPerMl: 0,
-    fatPerMl: 0,
-    carbPerMl: 21.5 / 500,
-    nitrogenPerMl: 0,
-    note: "添付文書: 500mL中 ブドウ糖21.5g・86kcal"
-  },
-  {
-    id: "pn-physio-35-500",
-    name: "フィジオ35輸液 500mL",
-    group: "PN",
-    packageMl: 500,
-    kcalPerMl: 400 / 1000,
-    proteinPerMl: 0,
-    fatPerMl: 0,
-    carbPerMl: 100 / 1000,
-    nitrogenPerMl: 0,
-    note: "まとめPDF掲載: G100・400kcal/L"
-  },
-  {
-    id: "pn-soludem-3ag-500",
-    name: "ソルデム3AG輸液 500mL",
-    group: "PN",
-    packageMl: 500,
-    kcalPerMl: 300 / 1000,
-    proteinPerMl: 0,
-    fatPerMl: 0,
-    carbPerMl: 75 / 1000,
-    nitrogenPerMl: 0,
-    note: "まとめPDF掲載: G75・300kcal/L"
-  },
-  {
-    id: "pn-elneopa-1",
-    name: "エルネオパNF 1号輸液",
-    group: "PN",
-    packageMl: 1000,
-    kcalPerMl: 0.56,
-    proteinPerMl: 0.02,
-    fatPerMl: 0,
-    carbPerMl: 0.12,
-    nitrogenPerMl: 0.00313,
-    note: "PDF掲載: 560kcal/1000mL"
-  },
-  {
-    id: "pn-elneopa-2",
-    name: "エルネオパNF 2号輸液",
-    group: "PN",
-    packageMl: 1000,
-    kcalPerMl: 0.82,
-    proteinPerMl: 0.03,
-    fatPerMl: 0,
-    carbPerMl: 0.175,
-    nitrogenPerMl: 0.0047,
-    note: "PDF掲載: 820kcal/1000mL"
-  },
-  {
-    id: "pn-amiparen",
-    name: "アミパレン輸液",
-    group: "PN",
-    packageMl: 200,
-    kcalPerMl: 0.4,
-    proteinPerMl: 0.0978,
-    fatPerMl: 0,
-    carbPerMl: (0.4 - 0.0978 * 4) / 4,
-    nitrogenPerMl: 0.01565,
-    note: "PDF掲載: 400kcal/L"
-  },
-  {
-    id: "pn-kidoparen",
-    name: "キドパレン輸液",
-    group: "PN",
-    packageMl: 1050,
-    kcalPerMl: 1500 / 1050,
-    proteinPerMl: 32.847 / 1050,
-    fatPerMl: 0,
-    carbPerMl: 342.2 / 1050,
-    nitrogenPerMl: 4.56 / 1050,
-    note: "添付文書: 1050mL中 総遊離アミノ酸32.847g・総熱量1500kcal"
-  },
-  {
-    id: "pn-aminoleban-500",
-    name: "アミノレバン点滴静注 500mL",
-    group: "PN",
-    packageMl: 500,
-    kcalPerMl: 319.4 / 1000,
-    proteinPerMl: 79.86 / 1000,
-    fatPerMl: 0,
-    carbPerMl: 0,
-    nitrogenPerMl: 12.22 / 1000,
-    note: "まとめPDF掲載: 総遊離アミノ酸79.86g/L・319.4kcal/L"
-  },
-  {
-    id: "pn-fulkalic-1",
-    name: "フルカリック1号輸液",
-    group: "PN",
-    packageMl: 903,
-    kcalPerMl: 560 / 903,
-    proteinPerMl: 20 / 903,
-    fatPerMl: 0,
-    carbPerMl: 120 / 903,
-    nitrogenPerMl: 3.12 / 903,
-    note: "PDF掲載: 560kcal/903mL"
-  },
-  {
-    id: "pn-fulkalic-2",
-    name: "フルカリック2号輸液",
-    group: "PN",
-    packageMl: 1003,
-    kcalPerMl: 840 / 1003,
-    proteinPerMl: 30 / 1003,
-    fatPerMl: 0,
-    carbPerMl: 180 / 1003,
-    nitrogenPerMl: 4.68 / 1003,
-    note: "PDF掲載: 840kcal/1003mL"
-  },
-  {
-    id: "pn-fulkalic-3",
-    name: "フルカリック3号輸液",
-    group: "PN",
-    packageMl: 1103,
-    kcalPerMl: 1160 / 1103,
-    proteinPerMl: 40 / 1103,
-    fatPerMl: 0,
-    carbPerMl: 250 / 1103,
-    nitrogenPerMl: 6.23 / 1103,
-    note: "PDF掲載: 1160kcal/1103mL"
-  },
-  {
-    id: "pn-intralipos-20-100",
-    name: "イントラリポス輸液20%",
-    group: "PN",
-    packageMl: 100,
-    kcalPerMl: 2.0,
-    proteinPerMl: 0,
-    fatPerMl: 0.2,
-    carbPerMl: 0,
-    nitrogenPerMl: 0,
-    note: "20% 100mL規格"
-  },
-  {
-    id: "pn-propofol-1-50",
-    name: "プロポフォール1%静注 50mL",
-    group: "PN",
-    packageMl: 50,
-    kcalPerMl: 0.9,
-    proteinPerMl: 0,
-    fatPerMl: 0.1,
-    carbPerMl: 0,
-    nitrogenPerMl: 0,
-    note: "添付文書: 1mLあたり約0.1gの脂質"
-  },
-  {
-    id: "pn-beefreed-500",
-    name: "ビーフリード輸液",
-    group: "PN",
-    packageMl: 500,
-    kcalPerMl: 210 / 500,
-    proteinPerMl: 15 / 500,
-    fatPerMl: 0,
-    carbPerMl: 37.5 / 500,
-    nitrogenPerMl: 2.35 / 500,
-    note: "添付文書: 500mL中 総遊離アミノ酸15g・総熱量210kcal"
-  },
-  {
-    id: "pn-glucose-50",
-    name: "ブドウ糖50%",
-    group: "PN",
-    packageMl: 20,
-    kcalPerMl: 2.0,
-    proteinPerMl: 0,
-    fatPerMl: 0,
-    carbPerMl: 0.5,
-    nitrogenPerMl: 0,
-    note: "PDF掲載: 200kcal/100mL"
-  },
-  {
-    id: "pn-glucose-70",
-    name: "ブドウ糖70%",
-    group: "PN",
-    packageMl: 350,
-    kcalPerMl: 980 / 350,
-    proteinPerMl: 0,
-    fatPerMl: 0,
-    carbPerMl: 245 / 350,
-    nitrogenPerMl: 0,
-    note: "添付文書: 350mL中 精製ブドウ糖245g・980kcal"
-  }
+const DRUGS = [
+  { id: "drug-3", name: "アルチバ / レミフェンタニル", concentrationUnit: "mg/mL", doseUnit: "μg/kg/min", amountUnit: "mg", dilutionUnit: "mL", defaultAmount: "2", defaultDilution: "20", recommendation: "麻酔導入維持の鎮痛　導入：0.5-1ガンマ　維持：0.25-max 2ガンマ\n\n人工呼吸器中の鎮静：負荷1.5μg/kg、維持0.008-0.25ガンマ" },
+  { id: "drug-4", name: "イノバン / ドパミン", concentrationUnit: "mg/mL", doseUnit: "μg/kg/min", amountUnit: "mg", dilutionUnit: "mL", defaultAmount: "150", defaultDilution: "50", recommendation: "・急性心不全：開始0.5-5γ　維持0.5-20γ\n・心停止後の治療：5-20γ\n　低容量1-3γ：利尿作用（エビデンス的に微妙）\n　中等量3-10γ：β1心拍数､CO増加\n　高用量10γ以上：α1血圧上昇作用" },
+  { id: "drug-5", name: "エスラックス", concentrationUnit: "mg/mL", doseUnit: "μg/kg/min", amountUnit: "mg", dilutionUnit: "mL", defaultAmount: "25", defaultDilution: "2.5", recommendation: "気管挿管時の筋弛緩：\n静注：導入0.6-0.9mg/kg 迅速導入時は1-1.2mg/kg\n持続：7ガンマ\nICU青本：気管挿管時0.6-1mg/kg静注" },
+  { id: "drug-6", name: "オノアクト", concentrationUnit: "mg/mL", doseUnit: "μg/kg/min", amountUnit: "mg", dilutionUnit: "mL", defaultAmount: "150", defaultDilution: "50", recommendation: "開始 0.5-1γ　心拍数､血圧により調整し1-10γで適宜調整" },
+  { id: "drug-7", name: "ケタミン / ケタラール", concentrationUnit: "mg/mL", doseUnit: "mg/kg/hr", amountUnit: "mg", dilutionUnit: "mL", defaultAmount: "200", defaultDilution: "20", recommendation: "全身麻酔の導入・補助　初回：1-2mg/kg\n\n検査／処置時の鎮痛・鎮静：初回1mg/kg　必要に応じて0.5-1mg/kg追加\nICU青本：鎮静0.1-0.5mg/kg静注し、持続静注0.05-0.4mg/kg/hr" },
+  { id: "drug-8", name: "シグマート", concentrationUnit: "mg/mL", doseUnit: "mg/kg/hr", amountUnit: "mg", dilutionUnit: "mL", defaultAmount: "48", defaultDilution: "48", recommendation: "・急性心不全：0.05-0.2 mg/kg/hr\n・不安定狭心症：2-6mg/h" },
+  { id: "drug-9", name: "シベレスタット", concentrationUnit: "mg/mL", doseUnit: "mg/kg/hr", amountUnit: "mg", dilutionUnit: "mL", defaultAmount: "300", defaultDilution: "50", recommendation: "急性肺傷害 0.2mg/kg/hr" },
+  { id: "drug-10", name: "ジルチアゼム", concentrationUnit: "mg/mL", doseUnit: "μg/kg/min", amountUnit: "mg", dilutionUnit: "mL", defaultAmount: "150", defaultDilution: "50", recommendation: "・上室性頻脈：10mgを3min iv\n\n・手術時の異常高血圧：1回10mg iv。or 持続 5-15γ。\n\n・不安定狭心症：1-5γ" },
+  { id: "drug-11", name: "デクスメデトミジン", concentrationUnit: "μg/mL", doseUnit: "μg/kg/hr", amountUnit: "μg", dilutionUnit: "mL", defaultAmount: "200", defaultDilution: "50", recommendation: "・集中治療における人工呼吸中・離脱後の鎮静，局所麻酔下における非挿管での手術・処置時の鎮静:\n負荷:6μg/kg/hr　10分間｡\n維持：0.2-0.7μg/kg/hr。" },
+  { id: "drug-12", name: "DOB", concentrationUnit: "mg/mL", doseUnit: "μg/kg/min", amountUnit: "mg", dilutionUnit: "mL", defaultAmount: "150", defaultDilution: "50", recommendation: "・急性心不全：開始0.5-5γ　維持0.5-20γ\n・心停止後の治療：5-20γ" },
+  { id: "drug-13", name: "ニカルジピン", concentrationUnit: "mg/mL", doseUnit: "μg/kg/min", amountUnit: "mg", dilutionUnit: "mL", defaultAmount: "10", defaultDilution: "10", recommendation: "・高血圧緊急症：0.5-6γ\n・手術時の異常高血圧の応急処置：2～10γ．急速に降圧したい場合：10～30μg/kg iv\n・急性心不全：0.5-2γ" },
+  { id: "drug-14", name: "ニトプロ / ニトロプルシドナトリウム", concentrationUnit: "mg/mL", doseUnit: "μg/kg/min", amountUnit: "mg", dilutionUnit: "mL", defaultAmount: "30", defaultDilution: "50", recommendation: "・手術時の低血圧維持：0.5-3γ\n・手術時の異常高血圧：0.5-3γ" },
+  { id: "drug-15", name: "ニトロール", concentrationUnit: "mg/mL", doseUnit: "mg/hr", amountUnit: "mg", dilutionUnit: "mL", defaultAmount: "5", defaultDilution: "10", recommendation: "・急性心不全：1.5-8mg/hr　最大10mg/hrまで\n・不安定狭心症：2-5mg/hr\n*その他もあり" },
+  { id: "drug-16", name: "ニトログリセリン", concentrationUnit: "mg/mL", doseUnit: "μg/kg/min", amountUnit: "mg", dilutionUnit: "mL", defaultAmount: "5", defaultDilution: "10", recommendation: "・急性心不全：初期0.05-0.1γ､維持 0.1-0.2γずつ調節\n・不安定狭心症：初期0.1-0.2γ､維持　1-2γ" },
+  { id: "drug-17", name: "Nad 3mg/50mL", concentrationUnit: "mg/mL", doseUnit: "μg/kg/min", amountUnit: "mg", dilutionUnit: "mL", defaultAmount: "3", defaultDilution: "50", recommendation: "・心原性ショック:0.03-0.3γ\n・敗血症性ショック：0.05γ\n・心停止後の治療：0.1-0.5　*α刺メイン→昇圧最高。" },
+  { id: "drug-18", name: "Nad 6mg/50mL", concentrationUnit: "mg/mL", doseUnit: "μg/kg/min", amountUnit: "mg", dilutionUnit: "mL", defaultAmount: "6", defaultDilution: "50", recommendation: "・心原性ショック:0.03-0.3γ\n・敗血症性ショック：0.05γ\n・心停止後の治療：0.1-0.5　*α刺メイン→昇圧最高。" },
+  { id: "drug-19", name: "Nad 12mg/50mL", concentrationUnit: "mg/mL", doseUnit: "μg/kg/min", amountUnit: "mg", dilutionUnit: "mL", defaultAmount: "12", defaultDilution: "50", recommendation: "・心原性ショック:0.03-0.3γ\n・敗血症性ショック：0.05γ\n・心停止後の治療：0.1-0.5　*α刺メイン→昇圧最高。" },
+  { id: "drug-20", name: "ハンプ / カルペリチド", concentrationUnit: "mg/mL", doseUnit: "μg/kg/min", amountUnit: "mg", dilutionUnit: "mL", defaultAmount: "1", defaultDilution: "50", recommendation: "・急性心不全 0.01-0.05γで開始　最大0.2γ" },
+  { id: "drug-21", name: "ピトレシン", concentrationUnit: "U/mL", doseUnit: "U/min", amountUnit: "U", dilutionUnit: "mL", defaultAmount: "40", defaultDilution: "40", recommendation: "・敗血性ショック：\n初期：0.03U/min　維持：0.01-0.03U/min（体重によらない）　最大0.03U/minまで(Nad効果不応時）\n・下垂体性尿崩症：1回2-10Uを1日2-3回\nその他もあり" },
+  { id: "drug-22", name: "フェンタニル 0.6mg/50mL", concentrationUnit: "μg/mL", doseUnit: "μg/kg/hr", amountUnit: "mg", dilutionUnit: "mL", defaultAmount: "0.6", defaultDilution: "50", recommendation: "鎮痛 0.5-5μg/kg/hr" },
+  { id: "drug-23", name: "フェンタニル 1mg/50mL", concentrationUnit: "μg/mL", doseUnit: "μg/kg/hr", amountUnit: "mg", dilutionUnit: "mL", defaultAmount: "1", defaultDilution: "50", recommendation: "鎮痛 0.5-5μg/kg/hr" },
+  { id: "drug-24", name: "フェンタニル 2mg/50mL", concentrationUnit: "μg/mL", doseUnit: "μg/kg/hr", amountUnit: "mg", dilutionUnit: "mL", defaultAmount: "2", defaultDilution: "50", recommendation: "鎮痛 0.5-5μg/kg/hr" },
+  { id: "drug-25", name: "プロポフォール 1%", concentrationUnit: "mg/mL", doseUnit: "mL/kg/hr", amountUnit: "mg", dilutionUnit: "mL", defaultAmount: "10", defaultDilution: "1", recommendation: "・集中治療における人工呼吸器の鎮静：\n導入0.3mg/kg/hr、維持0.3-3mg/kg/hr(0.03-0.3mL/kg/hr)適宜調整\n・全身麻酔の導入・維持：導入0.5mg/kg/10sec．状態観察し　維持 4～10mg/kghr" },
+  { id: "drug-26", name: "ミダゾラム", concentrationUnit: "mg/mL", doseUnit: "mg/kg/hr", amountUnit: "mg", dilutionUnit: "mL", defaultAmount: "20", defaultDilution: "20", recommendation: "・麻酔前投薬：0.08-0.1mg/kg　手術30-60分前\n・全身麻酔の導入､維持：0.15-3mg/kg\n・集中治療における人工呼吸器中の鎮静：\n導入 0.03mg/kg 5分以上経過で0.03mg/kg追加可。\n維持　0.03-0.06mg/kg/hr 適宜増減（推奨範囲0.03-0.18mg/kg/hr）\n・緩和ケアにおける鎮静：0.5-1mg/hr開始､追加は1-5mg/hrずつ。通常の維持量は1-20mg/hr" },
+  { id: "drug-27", name: "ミルリノン", concentrationUnit: "mg/mL", doseUnit: "μg/kg/min", amountUnit: "mg", dilutionUnit: "mL", defaultAmount: "20", defaultDilution: "40", recommendation: "・急性心不全：開始0.05-0.25γ　維持0.05-0.75γ\n・心停止後の治療：50μg/kgを10分かけて　維持0.375γ" },
+  { id: "drug-28", name: "モルヒネ", concentrationUnit: "mg/mL", doseUnit: "mg/kg/hr", amountUnit: "mg", dilutionUnit: "mL", defaultAmount: "", defaultDilution: "", recommendation: "" }
 ];
 
-const defaultRow = {
-  productId: EMPTY_PRODUCT_ID,
-  amount: "",
-  unit: "ml_h"
-};
+function initialCard() {
+  return {
+    cardId: crypto.randomUUID(),
+    drugId: EMPTY_DRUG_ID,
+    amount: "",
+    dilution: "",
+    mode: "rate",
+    rateInput: "",
+    doseInput: ""
+  };
+}
 
 const state = {
-  enRows: Array.from({ length: 4 }, () => ({ ...defaultRow })),
-  pnRows: Array.from({ length: 4 }, () => ({ ...defaultRow })),
-  weight: "",
-  advancedMode: "none",
-  urineVolume: "",
-  urineUN: ""
+  weight: "50",
+  cards: [initialCard()]
 };
-
-state.enRows[0] = { productId: "enteral-peptamen-af", amount: "20", unit: "ml_h" };
-state.pnRows[0] = { productId: "pn-elneopa-2", amount: "20", unit: "ml_h" };
 
 const elements = {
-  enSlots: document.querySelector("#enSlots"),
-  pnSlots: document.querySelector("#pnSlots"),
-  enSummary: document.querySelector("#enSummary"),
-  pnSummary: document.querySelector("#pnSummary"),
-  totalSummary: document.querySelector("#totalSummary"),
-  perKgSummary: document.querySelector("#perKgSummary"),
-  advancedPanel: document.querySelector("#advancedPanel"),
   bodyWeight: document.querySelector("#bodyWeight"),
-  advancedMode: document.querySelector("#advancedMode")
+  drugCards: document.querySelector("#drugCards"),
+  addDrugButton: document.querySelector("#addDrugButton")
 };
 
-let deferredInstallPrompt = null;
+function findDrug(drugId) {
+  return DRUGS.find((drug) => drug.id === drugId) ?? null;
+}
 
-function findProduct(productId) {
-  if (!productId) {
+function normalizeNumericInput(value) {
+  return String(value ?? "")
+    .replace(/[０-９]/g, (char) => String.fromCharCode(char.charCodeAt(0) - 0xfee0))
+    .replace(/．/g, ".")
+    .replace(/，/g, ",")
+    .replace(/ー|−|―/g, "-")
+    .replace(/＋/g, "+")
+    .replace(/\s+/g, "")
+    .replace(/,/g, "");
+}
+
+function parseNumber(value) {
+  const normalized = normalizeNumericInput(value);
+  if (!normalized) {
     return null;
   }
 
-  return products.find((product) => product.id === productId) ?? null;
+  const parsed = Number(normalized);
+  return Number.isFinite(parsed) ? parsed : null;
 }
 
-function formatNumber(value, digits = 1) {
+function formatNumber(value) {
   if (!Number.isFinite(value)) {
-    return "0";
+    return "エラー";
   }
 
   return new Intl.NumberFormat("ja-JP", {
-    minimumFractionDigits: 0,
-    maximumFractionDigits: digits
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
   }).format(value);
 }
 
-function getUnitLabel(unit) {
-  if (unit === "ml_h") return "mL/h";
-  if (unit === "ml_day") return "mL/日";
-  return "回/日";
+function formatInputNumber(value) {
+  return Number.isFinite(value) ? value.toFixed(2) : "";
 }
 
-function buildProductMeta(product) {
-  if (!product) {
-    return "未選択の枠です";
+function normalizeDoseUnit(unit) {
+  return (unit || "").replaceAll("ｍ", "m");
+}
+
+function doseNeedsWeight(doseUnit) {
+  return normalizeDoseUnit(doseUnit).includes("/kg/");
+}
+
+function convertUnitRatio(sourceUnit, targetUnit) {
+  if (sourceUnit === targetUnit) {
+    return 1;
+  }
+  if (sourceUnit === "mg" && targetUnit === "μg") {
+    return 1000;
+  }
+  if (sourceUnit === "μg" && targetUnit === "mg") {
+    return 0.001;
+  }
+  return null;
+}
+
+function convertConcentration(value, concentrationUnit, targetNumerator) {
+  if (!Number.isFinite(value)) {
+    return null;
   }
 
-  const packageMl = product.packageMl || 0;
-  const packageKcal = packageMl * (product.kcalPerMl || 0);
-  const packageProtein = packageMl * (product.proteinPerMl || 0);
-  const packageFat = packageMl * (product.fatPerMl || 0);
-  const packageCarb = packageMl * (product.carbPerMl || 0);
-
-  return [
-    `1規格 ${formatNumber(packageMl, 0)}mL`,
-    `${formatNumber(packageKcal, 1)}kcal`,
-    `糖質 ${formatNumber(packageCarb, 1)}g`,
-    `タンパク質 ${formatNumber(packageProtein, 1)}g`,
-    `脂質 ${formatNumber(packageFat, 1)}g`,
-    product.note
-  ].join(" / ");
+  const numerator = concentrationUnit.split("/")[0];
+  const ratio = convertUnitRatio(numerator, targetNumerator);
+  return ratio === null ? (numerator === targetNumerator ? value : null) : value * ratio;
 }
 
-function createOptions(group, selectedId) {
-  const emptySelected = selectedId === EMPTY_PRODUCT_ID ? "selected" : "";
-  const groupProducts = products.filter((product) => product.group === group);
+function concentrationFromInputs(amount, amountUnit, dilution, concentrationUnit) {
+  const amountValue = parseNumber(amount);
+  const dilutionValue = parseNumber(dilution);
 
+  if (amountValue === null || dilutionValue === null) {
+    return { value: null, error: "成分量と希釈総量を入力してください。" };
+  }
+  if (amountValue <= 0 || dilutionValue <= 0) {
+    return { value: null, error: "成分量と希釈総量は0より大きい値を入力してください。" };
+  }
+
+  const targetUnit = concentrationUnit.split("/")[0];
+  const ratio = convertUnitRatio(amountUnit, targetUnit);
+  if (ratio === null) {
+    return { value: null, error: "濃度単位の換算に対応していません。" };
+  }
+
+  return { value: amountValue * ratio / dilutionValue, error: "" };
+}
+
+function computeDoseFromRate({ rate, concentration, concentrationUnit, weight, doseUnit }) {
+  const normalizedUnit = normalizeDoseUnit(doseUnit);
+
+  if (normalizedUnit === "μg/kg/min") {
+    const ugPerMl = convertConcentration(concentration, concentrationUnit, "μg");
+    return ugPerMl === null ? null : ugPerMl * rate / weight / 60;
+  }
+  if (normalizedUnit === "mg/kg/hr") {
+    const mgPerMl = convertConcentration(concentration, concentrationUnit, "mg");
+    return mgPerMl === null ? null : mgPerMl * rate / weight;
+  }
+  if (normalizedUnit === "μg/kg/hr") {
+    const ugPerMl = convertConcentration(concentration, concentrationUnit, "μg");
+    return ugPerMl === null ? null : ugPerMl * rate / weight;
+  }
+  if (normalizedUnit === "mg/hr") {
+    const mgPerMl = convertConcentration(concentration, concentrationUnit, "mg");
+    return mgPerMl === null ? null : mgPerMl * rate;
+  }
+  if (normalizedUnit === "U/min") {
+    const uPerMl = convertConcentration(concentration, concentrationUnit, "U");
+    return uPerMl === null ? null : uPerMl * rate / 60;
+  }
+  if (normalizedUnit === "mL/kg/hr") {
+    return rate / weight;
+  }
+  return null;
+}
+
+function computeRateFromDose({ dose, concentration, concentrationUnit, weight, doseUnit }) {
+  const normalizedUnit = normalizeDoseUnit(doseUnit);
+
+  if (normalizedUnit === "μg/kg/min") {
+    const ugPerMl = convertConcentration(concentration, concentrationUnit, "μg");
+    return ugPerMl === null ? null : dose * weight * 60 / ugPerMl;
+  }
+  if (normalizedUnit === "mg/kg/hr") {
+    const mgPerMl = convertConcentration(concentration, concentrationUnit, "mg");
+    return mgPerMl === null ? null : dose * weight / mgPerMl;
+  }
+  if (normalizedUnit === "μg/kg/hr") {
+    const ugPerMl = convertConcentration(concentration, concentrationUnit, "μg");
+    return ugPerMl === null ? null : dose * weight / ugPerMl;
+  }
+  if (normalizedUnit === "mg/hr") {
+    const mgPerMl = convertConcentration(concentration, concentrationUnit, "mg");
+    return mgPerMl === null ? null : dose / mgPerMl;
+  }
+  if (normalizedUnit === "U/min") {
+    const uPerMl = convertConcentration(concentration, concentrationUnit, "U");
+    return uPerMl === null ? null : dose * 60 / uPerMl;
+  }
+  if (normalizedUnit === "mL/kg/hr") {
+    return dose * weight;
+  }
+  return null;
+}
+
+function evaluateCard(card) {
+  const drug = findDrug(card.drugId);
+  if (!drug) {
+    return { drug: null, resultValue: "薬剤を選択", resultTitle: "未選択", resultHelp: "薬剤選択後に計算できます。", resultError: false };
+  }
+
+  const concentrationResult = concentrationFromInputs(card.amount, drug.amountUnit, card.dilution, drug.concentrationUnit);
+  if (concentrationResult.value === null) {
+    return {
+      drug,
+      concentrationLabel: "エラー",
+      resultTitle: "入力を確認",
+      resultValue: "エラー",
+      resultHelp: concentrationResult.error,
+      resultError: true
+    };
+  }
+
+  const weight = parseNumber(state.weight);
+  if (doseNeedsWeight(drug.doseUnit) && (weight === null || weight <= 0)) {
+    return {
+      drug,
+      concentrationLabel: `${formatNumber(concentrationResult.value)} ${drug.concentrationUnit}`,
+      resultTitle: "体重を確認",
+      resultValue: "エラー",
+      resultHelp: "体重は0より大きい値を入力してください。",
+      resultError: true
+    };
+  }
+
+  const activeInput = card.mode === "rate" ? card.rateInput : card.doseInput;
+  const activeValue = parseNumber(activeInput);
+  if (activeValue === null) {
+    return {
+      drug,
+      concentrationLabel: `${formatNumber(concentrationResult.value)} ${drug.concentrationUnit}`,
+      resultTitle: card.mode === "rate" ? "目標投与量" : "投与速度",
+      resultValue: "--",
+      resultHelp: card.mode === "rate" ? "速度を入力すると投与量を算出します。" : "投与量を入力すると速度を算出します。",
+      resultError: false
+    };
+  }
+
+  if (activeValue < 0) {
+    return {
+      drug,
+      concentrationLabel: `${formatNumber(concentrationResult.value)} ${drug.concentrationUnit}`,
+      resultTitle: "入力を確認",
+      resultValue: "エラー",
+      resultHelp: "入力値は0以上で指定してください。",
+      resultError: true
+    };
+  }
+
+  const computed = card.mode === "rate"
+    ? computeDoseFromRate({ rate: activeValue, concentration: concentrationResult.value, concentrationUnit: drug.concentrationUnit, weight, doseUnit: drug.doseUnit })
+    : computeRateFromDose({ dose: activeValue, concentration: concentrationResult.value, concentrationUnit: drug.concentrationUnit, weight, doseUnit: drug.doseUnit });
+
+  if (!Number.isFinite(computed) || computed === null || computed < 0) {
+    return {
+      drug,
+      concentrationLabel: `${formatNumber(concentrationResult.value)} ${drug.concentrationUnit}`,
+      resultTitle: "計算不可",
+      resultValue: "エラー",
+      resultHelp: "計算できません。入力値を確認してください。",
+      resultError: true
+    };
+  }
+
+  return {
+    drug,
+    concentrationLabel: `${formatNumber(concentrationResult.value)} ${drug.concentrationUnit}`,
+    concentrationValue: concentrationResult.value,
+    computedValue: computed,
+    resultTitle: card.mode === "rate" ? "算出された目標投与量" : "算出された投与速度",
+    resultValue: `${formatNumber(computed)} ${card.mode === "rate" ? drug.doseUnit : "mL/h"}`,
+    resultHelp: card.mode === "rate" ? "入力した速度から投与量を算出しました。" : "入力した投与量から速度を算出しました。",
+    resultError: false
+  };
+}
+
+function defaultLabel(value, unit) {
+  return value ? `${value} ${unit}` : "未設定";
+}
+
+function drugOptions(selectedId) {
   return [
-    `<option value="${EMPTY_PRODUCT_ID}" ${emptySelected}>未選択</option>`,
-    ...groupProducts.map((product) => {
-      const selected = product.id === selectedId ? "selected" : "";
-      return `<option value="${product.id}" ${selected}>${product.name}</option>`;
-    })
+    `<option value="${EMPTY_DRUG_ID}" ${selectedId === EMPTY_DRUG_ID ? "selected" : ""}>薬剤を選択</option>`,
+    ...DRUGS.map((drug) => `<option value="${drug.id}" ${selectedId === drug.id ? "selected" : ""}>${escapeAttribute(drug.name)}</option>`)
   ].join("");
 }
 
-function getDailyVolume(row, product) {
-  if (!product) {
-    return 0;
-  }
-
-  const amount = Number(row.amount) || 0;
-
-  if (row.unit === "ml_day") {
-    return amount;
-  }
-
-  if (row.unit === "ml_h") {
-    return amount * 24;
-  }
-
-  return amount * (product.packageMl || 0);
+function modeOptions(selectedMode) {
+  return [
+    `<option value="rate" ${selectedMode === "rate" ? "selected" : ""}>速度から投与量を算出</option>`,
+    `<option value="dose" ${selectedMode === "dose" ? "selected" : ""}>投与量から速度を算出</option>`
+  ].join("");
 }
 
-function calculateRow(row) {
-  const product = findProduct(row.productId);
-  if (!product) {
-    return { product: null, volumeMl: 0, kcal: 0, protein: 0, fat: 0, carb: 0, nitrogen: 0, npc: 0 };
+function escapeAttribute(value) {
+  return String(value ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;");
+}
+
+function activeValueForDisplay(card, evaluated, field) {
+  if (field === "rateInput") {
+    if (card.mode === "dose" && Number.isFinite(evaluated.computedValue)) {
+      return formatInputNumber(evaluated.computedValue);
+    }
+    return card.rateInput;
   }
 
-  const volumeMl = getDailyVolume(row, product);
-  const protein = volumeMl * product.proteinPerMl;
-  const fat = volumeMl * product.fatPerMl;
-  const carb = volumeMl * product.carbPerMl;
-  const nitrogen = volumeMl * product.nitrogenPerMl;
-  const kcal = protein * 4 + fat * 9 + carb * 4;
-  const npc = kcal - protein * 4;
-
-  return { product, volumeMl, kcal, protein, fat, carb, nitrogen, npc };
+  if (card.mode === "rate" && Number.isFinite(evaluated.computedValue)) {
+    return formatInputNumber(evaluated.computedValue);
+  }
+  return card.doseInput;
 }
 
-function sumRows(rows) {
-  return rows.reduce(
-    (accumulator, row) => {
-      const result = calculateRow(row);
-      accumulator.volumeMl += result.volumeMl;
-      accumulator.kcal += result.kcal;
-      accumulator.protein += result.protein;
-      accumulator.fat += result.fat;
-      accumulator.carb += result.carb;
-      accumulator.nitrogen += result.nitrogen;
-      accumulator.npc += result.npc;
-      return accumulator;
-    },
-    { volumeMl: 0, kcal: 0, protein: 0, fat: 0, carb: 0, nitrogen: 0, npc: 0 }
-  );
-}
+function cardMarkup(card, index) {
+  const evaluated = evaluateCard(card);
+  const drug = evaluated.drug;
 
-function renderSlots(group) {
-  const container = group === "EN" ? elements.enSlots : elements.pnSlots;
-  const rows = group === "EN" ? state.enRows : state.pnRows;
-
-  container.innerHTML = rows
-    .map((row, index) => {
-      const result = calculateRow(row);
-      const product = result.product;
-      const meta = buildProductMeta(product);
-      const showInputs = Boolean(product);
-      return `
-        <article class="slot-card" data-group="${group}" data-index="${index}">
-          <div class="slot-header">
-            <span class="slot-index">${index + 1}枠目</span>
-            <span class="slot-badge" data-cell="badge">${product ? getUnitLabel(row.unit) : "未選択"}</span>
-          </div>
-          <select class="slot-select" data-group="${group}" data-index="${index}" data-field="productId">
-            ${createOptions(group, row.productId)}
+  if (!drug) {
+    return `
+      <article class="drug-card empty">
+        <div class="field-card">
+          <label class="field-label" for="drug-select-${card.cardId}">薬剤選択</label>
+          <select id="drug-select-${card.cardId}" data-card-id="${card.cardId}" data-field="drugId">
+            ${drugOptions(card.drugId)}
           </select>
-          <p class="slot-meta" data-cell="meta">${meta}</p>
-          <div class="${showInputs ? "" : "hidden"}" data-input-area>
-          <div class="dose-row">
-            <input
-              class="dose-input"
-              type="number"
-              min="0"
-              step="0.1"
-              inputmode="decimal"
-              placeholder="値を入力"
-              value="${row.amount}"
-              data-group="${group}"
-              data-index="${index}"
-              data-field="amount"
-            />
-            <select class="dose-unit" data-group="${group}" data-index="${index}" data-field="unit">
-              <option value="ml_h" ${row.unit === "ml_h" ? "selected" : ""}>mL/h</option>
-              <option value="ml_day" ${row.unit === "ml_day" ? "selected" : ""}>mL/日</option>
-              <option value="times_day" ${row.unit === "times_day" ? "selected" : ""}>回/日</option>
+          <p class="empty-copy">選択した薬剤だけ表示されます。</p>
+        </div>
+      </article>
+    `;
+  }
+
+  return `
+    <article class="drug-card">
+      <div class="card-top">
+        <div>
+          <h3 class="card-title">${index + 1}. ${escapeAttribute(drug.name)}</h3>
+          <p class="card-subtitle">体重・調製内容・片側入力から自動計算します。</p>
+        </div>
+        <div class="card-actions">
+          <button type="button" class="ghost-button" data-action="reset-defaults" data-card-id="${card.cardId}">標準に戻す</button>
+          <button type="button" class="danger-button" data-action="remove-card" data-card-id="${card.cardId}">削除</button>
+        </div>
+      </div>
+
+      <div class="card-grid">
+        <div class="compact-grid">
+          <div class="field-card">
+            <label class="field-label" for="drug-select-${card.cardId}">薬剤</label>
+            <select id="drug-select-${card.cardId}" data-card-id="${card.cardId}" data-field="drugId">
+              ${drugOptions(card.drugId)}
             </select>
           </div>
-          <div class="slot-foot">
-            <div class="mini-metric"><span>容量</span><strong data-cell="volume">${formatNumber(result.volumeMl, 0)} mL</strong></div>
-            <div class="mini-metric"><span>kcal</span><strong data-cell="kcal">${formatNumber(result.kcal, 1)}</strong></div>
-            <div class="mini-metric"><span>タンパク質</span><strong data-cell="protein">${formatNumber(result.protein, 1)} g</strong></div>
+          <div class="field-card">
+            <label class="field-label" for="mode-${card.cardId}">計算方法</label>
+            <select id="mode-${card.cardId}" data-card-id="${card.cardId}" data-field="mode">
+              ${modeOptions(card.mode)}
+            </select>
           </div>
-          </div>
-        </article>
-      `;
-    })
-    .join("");
-}
+        </div>
 
-function createSummaryTable(title, totals, unitSuffix = "") {
-  return `
-    <table class="summary-table">
-      <thead>
-        <tr>
-          <th>成分</th>
-          <th colspan="2">${title}</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr><td class="label">容量</td><td class="value">${formatNumber(totals.volumeMl, 0)}</td><td class="unit">mL${unitSuffix}</td></tr>
-        <tr><td class="label">エネルギー</td><td class="value">${formatNumber(totals.kcal, 1)}</td><td class="unit">kcal${unitSuffix}</td></tr>
-        <tr><td class="label">タンパク質</td><td class="value">${formatNumber(totals.protein, 1)}</td><td class="unit">g${unitSuffix}</td></tr>
-        <tr><td class="label">脂質</td><td class="value">${formatNumber(totals.fat, 1)}</td><td class="unit">g${unitSuffix}</td></tr>
-        <tr><td class="label">炭水化物</td><td class="value">${formatNumber(totals.carb, 1)}</td><td class="unit">g${unitSuffix}</td></tr>
-      </tbody>
-    </table>
+        <div class="input-grid">
+          <div class="field-card">
+            <label class="field-label" for="amount-${card.cardId}">成分量</label>
+            <div class="input-with-unit">
+              <input id="amount-${card.cardId}" type="text" inputmode="decimal" value="${escapeAttribute(card.amount)}" data-card-id="${card.cardId}" data-field="amount" placeholder="${drug.defaultAmount || ""}" />
+              <span>${drug.amountUnit}</span>
+            </div>
+          </div>
+
+          <div class="field-card">
+            <label class="field-label" for="dilution-${card.cardId}">希釈総量</label>
+            <div class="input-with-unit">
+              <input id="dilution-${card.cardId}" type="text" inputmode="decimal" value="${escapeAttribute(card.dilution)}" data-card-id="${card.cardId}" data-field="dilution" placeholder="${drug.defaultDilution || ""}" />
+              <span>${drug.dilutionUnit}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="summary-row">
+          <div class="mini-kpi">
+            <span>濃度</span>
+            <strong>${evaluated.concentrationLabel || "--"}</strong>
+          </div>
+          <div class="mini-kpi">
+            <span>標準設定</span>
+            <strong>${defaultLabel(drug.defaultAmount, drug.amountUnit)} / ${defaultLabel(drug.defaultDilution, drug.dilutionUnit)}</strong>
+          </div>
+          <div class="mini-kpi">
+            <span>計算単位</span>
+            <strong>${drug.doseUnit}</strong>
+          </div>
+        </div>
+
+        <div class="input-grid">
+          <div class="field-card">
+            <label class="field-label" for="rate-${card.cardId}">速度</label>
+            <div class="input-with-unit">
+              <input id="rate-${card.cardId}" type="text" inputmode="decimal" value="${escapeAttribute(activeValueForDisplay(card, evaluated, "rateInput"))}" data-card-id="${card.cardId}" data-field="rateInput" ${card.mode === "rate" ? "" : "readonly"} />
+              <span>mL/h</span>
+            </div>
+          </div>
+
+          <div class="field-card">
+            <label class="field-label" for="dose-${card.cardId}">目標投与量</label>
+            <div class="input-with-unit">
+              <input id="dose-${card.cardId}" type="text" inputmode="decimal" value="${escapeAttribute(activeValueForDisplay(card, evaluated, "doseInput"))}" data-card-id="${card.cardId}" data-field="doseInput" ${card.mode === "dose" ? "" : "readonly"} />
+              <span>${drug.doseUnit}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="result-panel ${evaluated.resultError ? "error" : ""}">
+          <div class="result-caption">${evaluated.resultTitle}</div>
+          <div class="result-value">${evaluated.resultValue}</div>
+          <div class="result-help">${evaluated.resultHelp}</div>
+        </div>
+
+        <div class="field-card">
+          <div class="note-list">
+            <div class="note-chip"><strong>体重</strong> ${escapeAttribute(state.weight || "--")} kg</div>
+            <div class="note-chip"><strong>入力</strong> ${card.mode === "rate" ? "速度" : "投与量"}</div>
+          </div>
+          <details>
+            <summary>参考用量を見る</summary>
+            <div class="recommendation">${drug.recommendation || "参考文言は未設定です。"}</div>
+          </details>
+        </div>
+      </div>
+    </article>
   `;
 }
 
-function renderSummaries() {
-  const enTotals = sumRows(state.enRows);
-  const pnTotals = sumRows(state.pnRows);
-  const totalTotals = {
-    volumeMl: enTotals.volumeMl + pnTotals.volumeMl,
-    kcal: enTotals.kcal + pnTotals.kcal,
-    protein: enTotals.protein + pnTotals.protein,
-    fat: enTotals.fat + pnTotals.fat,
-    carb: enTotals.carb + pnTotals.carb,
-    nitrogen: enTotals.nitrogen + pnTotals.nitrogen,
-    npc: enTotals.npc + pnTotals.npc
+function render(focusDescriptor = null) {
+  elements.bodyWeight.value = state.weight;
+  elements.drugCards.innerHTML = state.cards.map((card, index) => cardMarkup(card, index)).join("");
+
+  if (!focusDescriptor) {
+    return;
+  }
+
+  const selector = `[data-card-id="${focusDescriptor.cardId}"][data-field="${focusDescriptor.field}"]`;
+  const target = document.querySelector(selector);
+  if (target) {
+    target.focus();
+    if (typeof focusDescriptor.selectionStart === "number" && typeof target.setSelectionRange === "function") {
+      target.setSelectionRange(focusDescriptor.selectionStart, focusDescriptor.selectionEnd);
+    }
+  }
+}
+
+function captureFocusDescriptor(target) {
+  if (!target?.dataset?.cardId || !target?.dataset?.field) {
+    return null;
+  }
+
+  return {
+    cardId: target.dataset.cardId,
+    field: target.dataset.field,
+    selectionStart: typeof target.selectionStart === "number" ? target.selectionStart : null,
+    selectionEnd: typeof target.selectionEnd === "number" ? target.selectionEnd : null
   };
-  const weight = Number(state.weight) || 0;
+}
 
-  elements.enSummary.innerHTML = createSummaryTable("経腸栄養剤 (EN) 合計値", enTotals);
-  elements.pnSummary.innerHTML = createSummaryTable("静脈栄養剤 (PN) 合計値", pnTotals);
-  elements.totalSummary.innerHTML = createSummaryTable("製剤合計値", totalTotals);
-
-  if (weight > 0) {
-    elements.perKgSummary.innerHTML = createSummaryTable("体重あたり合計値", {
-      volumeMl: totalTotals.volumeMl / weight,
-      kcal: totalTotals.kcal / weight,
-      protein: totalTotals.protein / weight,
-      fat: totalTotals.fat / weight,
-      carb: totalTotals.carb / weight
-    }, "/kg");
-  } else {
-    elements.perKgSummary.innerHTML = `<div class="advanced-card"><div class="advanced-formula">体重を入力すると /kg 計算を表示します。</div></div>`;
+function resetCardToDefaults(card) {
+  const drug = findDrug(card.drugId);
+  if (!drug) {
+    return card;
   }
 
-  renderAdvanced(totalTotals, weight);
+  return {
+    ...card,
+    amount: drug.defaultAmount,
+    dilution: drug.defaultDilution,
+    mode: "rate",
+    rateInput: "",
+    doseInput: ""
+  };
 }
 
-function renderAdvanced(totals, weight) {
-  if (state.advancedMode === "none") {
-    elements.advancedPanel.innerHTML = "";
-    return;
+function updateCard(cardId, updater) {
+  state.cards = state.cards.map((card) => (card.cardId === cardId ? updater(card) : card));
+}
+
+function sanitizeFieldValue(field, value) {
+  if (["amount", "dilution", "rateInput", "doseInput", "weight"].includes(field)) {
+    return normalizeNumericInput(value);
   }
-
-  if (state.advancedMode === "npcn") {
-    const npcn = totals.nitrogen > 0 ? totals.npc / totals.nitrogen : 0;
-    elements.advancedPanel.innerHTML = `
-      <div class="advanced-panel-inner">
-        <div class="advanced-card">
-          <h3>NPC/N</h3>
-          <div class="advanced-formula">非タンパクカロリー = 総エネルギー - タンパク質(g) × 4</div>
-          <div class="advanced-grid">
-            <div class="advanced-value"><span>非タンパクカロリー</span><strong>${formatNumber(totals.npc, 1)} kcal</strong></div>
-            <div class="advanced-value"><span>窒素量</span><strong>${formatNumber(totals.nitrogen, 2)} g</strong></div>
-            <div class="advanced-value"><span>NPC/N</span><strong>${formatNumber(npcn, 1)}</strong></div>
-          </div>
-        </div>
-      </div>
-    `;
-    return;
-  }
-
-  const urineVolume = Number(state.urineVolume) || 0;
-  const urineUN = Number(state.urineUN) || 0;
-  const nitrogenIn = totals.nitrogen;
-  const nitrogenOut = urineVolume * urineUN / 100000 + weight * 0.031;
-  const balance = nitrogenIn - nitrogenOut;
-
-  elements.advancedPanel.innerHTML = `
-    <div class="advanced-panel-inner">
-      <div class="advanced-card">
-        <h3>窒素バランス計算</h3>
-        <div class="advanced-formula">
-          窒素イン = 総タンパク質 / 6.25<br />
-          窒素アウト = 尿量(mL) × 尿中UN濃度(mg/dL) / 100000 + 体重 × 0.031
-        </div>
-        <div class="advanced-grid">
-          <label class="field-label" for="urineVolume">尿量 (mL/日)</label>
-          <input class="advanced-input" id="urineVolume" type="number" min="0" step="1" inputmode="decimal" value="${state.urineVolume}" />
-          <label class="field-label" for="urineUN">尿中UN濃度 (mg/dL)</label>
-          <input class="advanced-input" id="urineUN" type="number" min="0" step="0.1" inputmode="decimal" value="${state.urineUN}" />
-          <div class="advanced-value"><span>窒素イン</span><strong>${formatNumber(nitrogenIn, 2)} g</strong></div>
-          <div class="advanced-value"><span>窒素アウト</span><strong>${formatNumber(nitrogenOut, 3)} g</strong></div>
-          <div class="advanced-value"><span>窒素バランス</span><strong>${formatNumber(balance, 3)} g</strong></div>
-        </div>
-      </div>
-    </div>
-  `;
+  return value;
 }
 
-function render() {
-  renderSlots("EN");
-  renderSlots("PN");
-  renderSummaries();
-}
+elements.addDrugButton.addEventListener("click", () => {
+  state.cards.push(initialCard());
+  render();
+});
 
-function refreshSlotCard(group, index) {
-  const container = group === "EN" ? elements.enSlots : elements.pnSlots;
-  const row = getRowsByGroup(group)[index];
-  const card = container.querySelector(`.slot-card[data-group="${group}"][data-index="${index}"]`);
-  if (!card || !row) {
-    return;
-  }
+elements.bodyWeight.addEventListener("input", (event) => {
+  state.weight = sanitizeFieldValue("weight", event.target.value);
+  render();
+});
 
-  const result = calculateRow(row);
-  const product = result.product;
-  const meta = buildProductMeta(product);
-  const badge = card.querySelector('[data-cell="badge"]');
-  const metaNode = card.querySelector('[data-cell="meta"]');
-  const volume = card.querySelector('[data-cell="volume"]');
-  const kcal = card.querySelector('[data-cell="kcal"]');
-  const protein = card.querySelector('[data-cell="protein"]');
-  const inputArea = card.querySelector("[data-input-area]");
-
-  if (badge) badge.textContent = product ? getUnitLabel(row.unit) : "未選択";
-  if (metaNode) metaNode.textContent = meta;
-  if (volume) volume.textContent = `${formatNumber(result.volumeMl, 0)} mL`;
-  if (kcal) kcal.textContent = formatNumber(result.kcal, 1);
-  if (protein) protein.textContent = `${formatNumber(result.protein, 1)} g`;
-  if (inputArea) inputArea.classList.toggle("hidden", !product);
-}
-
-function getRowsByGroup(group) {
-  return group === "EN" ? state.enRows : state.pnRows;
-}
-
-document.addEventListener("input", (event) => {
+function handleCardInput(event) {
   const target = event.target;
   if (!(target instanceof HTMLInputElement || target instanceof HTMLSelectElement)) {
     return;
   }
 
-  if (target.id === "bodyWeight") {
-    state.weight = target.value;
-    renderSummaries();
+  const { cardId, field } = target.dataset;
+  if (!cardId || !field) {
     return;
   }
 
-  if (target.id === "advancedMode") {
-    state.advancedMode = target.value;
-    renderSummaries();
+  const focusDescriptor = captureFocusDescriptor(target);
+  const sanitizedValue = sanitizeFieldValue(field, target.value);
+
+  updateCard(cardId, (card) => {
+    if (field === "drugId") {
+      const drug = findDrug(sanitizedValue);
+      return drug
+        ? { ...card, drugId: drug.id, amount: drug.defaultAmount, dilution: drug.defaultDilution, mode: "rate", rateInput: "", doseInput: "" }
+        : { ...initialCard(), cardId };
+    }
+
+    if (field === "mode") {
+      return { ...card, mode: sanitizedValue === "dose" ? "dose" : "rate" };
+    }
+
+    return { ...card, [field]: sanitizedValue };
+  });
+
+  render(focusDescriptor);
+}
+
+elements.drugCards.addEventListener("input", handleCardInput);
+elements.drugCards.addEventListener("change", handleCardInput);
+
+elements.drugCards.addEventListener("click", (event) => {
+  const target = event.target;
+  if (!(target instanceof HTMLButtonElement)) {
     return;
   }
 
-  if (target.id === "urineVolume") {
-    state.urineVolume = target.value;
-    renderSummaries();
+  const { action, cardId } = target.dataset;
+  if (!action || !cardId) {
     return;
   }
 
-  if (target.id === "urineUN") {
-    state.urineUN = target.value;
-    renderSummaries();
-    return;
-  }
-
-  const group = target.dataset.group;
-  const index = Number(target.dataset.index);
-  const field = target.dataset.field;
-  const rows = getRowsByGroup(group);
-
-  if (!rows || !Number.isInteger(index) || !field || !rows[index]) {
-    return;
-  }
-
-  rows[index][field] = target.value;
-
-  if (field === "productId" || field === "unit") {
+  if (action === "remove-card") {
+    state.cards = state.cards.filter((card) => card.cardId !== cardId);
+    if (state.cards.length === 0) {
+      state.cards = [initialCard()];
+    }
     render();
     return;
   }
 
-  renderSummaries();
-  refreshSlotCard(group, index);
+  if (action === "reset-defaults") {
+    updateCard(cardId, (card) => resetCardToDefaults(card));
+    render();
+  }
 });
 
-document.addEventListener("change", (event) => {
-  const target = event.target;
-  if (!(target instanceof HTMLInputElement || target instanceof HTMLSelectElement)) {
-    return;
-  }
-
-  const group = target.dataset.group;
-  const index = Number(target.dataset.index);
-  const field = target.dataset.field;
-  const rows = getRowsByGroup(group);
-
-  if (!rows || !Number.isInteger(index) || !field || !rows[index]) {
-    return;
-  }
-
-  rows[index][field] = target.value;
-  render();
-});
-
-function registerServiceWorker() {
-  if (!("serviceWorker" in navigator)) {
-    return;
-  }
-
+if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
     navigator.serviceWorker.register("./service-worker.js").catch(() => {});
   });
 }
 
-function setupPwaInstall() {
-  window.addEventListener("beforeinstallprompt", (event) => {
-    event.preventDefault();
-    deferredInstallPrompt = event;
-  });
-
-  window.addEventListener("appinstalled", () => {
-    deferredInstallPrompt = null;
-  });
-}
-
-elements.bodyWeight.value = state.weight;
-elements.advancedMode.value = state.advancedMode;
-
 render();
-registerServiceWorker();
-setupPwaInstall();
