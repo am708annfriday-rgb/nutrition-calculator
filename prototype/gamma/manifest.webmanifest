@@ -4,8 +4,8 @@
   "description": "体重、成分量、希釈総量、速度または投与量から双方向に計算するツール",
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#f2efe7",
-  "theme_color": "#1d7c63",
+  "background_color": "#f0f4ff",
+  "theme_color": "#2f73df",
   "lang": "ja",
   "icons": [
     {
