@@ -1,65 +1,54 @@
-# ガンマ計算アプリ 公開手順
+# 公開手順
 
-このフォルダは、`prototype/` をそのまま GitHub Pages で公開できるようにしてあります。
+このフォルダには、`prototype/` をそのまま Web 公開できる設定を追加しています。
 
-## いちばんおすすめ
+## 最短で URL を出す方法
 
-GitHub に push して GitHub Pages で公開し、スマホでホーム画面に追加して使います。
+### GitHub Pages
 
-公開後の URL は次の形です。
+1. GitHub で新しい空リポジトリを作る
+2. このフォルダで以下を実行する
+
+```bash
+git add .
+git commit -m "Add nutrition calculator PWA prototype"
+git remote add origin https://github.com/<ユーザー名>/<リポジトリ名>.git
+git push -u origin main
+```
+
+3. GitHub のリポジトリで `Settings > Pages` を開く
+4. `Build and deployment` が `GitHub Actions` になっていることを確認する
+5. Actions が完了すると公開される
+
+公開 URL:
 
 ```text
 https://<ユーザー名>.github.io/<リポジトリ名>/
 ```
 
-## 手順
+アプリ URL:
 
-### 1. GitHub で空のリポジトリを作る
-
-- 例: `gamma-calc`
-- `README` や `.gitignore` は GitHub 側で作らなくて大丈夫です
-
-### 2. このフォルダで push する
-
-```bash
-git add .
-git commit -m "Add gamma calculator PWA"
-git remote add origin https://github.com/<ユーザー名>/<リポジトリ名>.git
-git branch -M main
-git push -u origin main
+```text
+栄養計算: https://<ユーザー名>.github.io/<リポジトリ名>/
+ガンマ計算: https://<ユーザー名>.github.io/<リポジトリ名>/gamma/
 ```
 
-すでに `origin` がある場合は、`git remote add origin ...` は不要です。
+### Netlify
 
-### 3. GitHub Pages を有効にする
+1. GitHub に push する
+2. Netlify に GitHub リポジトリを接続する
+3. `publish directory` は `prototype` のままでよい
 
-- GitHub のリポジトリで `Settings`
-- 左メニューの `Pages`
-- `Build and deployment` を確認
-- `Source` は `GitHub Actions`
+公開 URL は Netlify 側で発行される
 
-このリポジトリには [pages.yml](/Users/am708/Library/CloudStorage/GoogleDrive-am708annfriday@gmail.com/マイドライブ/Inbox/Codex用医療ツール開発事務局/.github/workflows/pages.yml) が入っているので、`main` に push すると `prototype/` が自動公開されます。
+## ホーム画面追加
 
-### 4. 公開を確認する
-
-- `Actions` タブで `Deploy GitHub Pages` が完了
-- 数分後に公開 URL へアクセス
-
-## スマホで使う
-
-### iPhone
-
-- Safari で公開 URL を開く
-- 共有メニュー
-- `ホーム画面に追加`
-
-### Android
-
-- Chrome で公開 URL を開く
-- `ホーム画面に追加` または `インストール`
+- Android:
+  Chrome で公開 URL を開き、「ホーム画面に追加」または「インストール」
+- iPhone:
+  Safari で公開 URL を開き、共有メニューから「ホーム画面に追加」
 
 ## 補足
 
-- PWA は `https://` で開いたときに有効です
-- ローカルで `file://` 直開きした場合は、ホーム画面追加やオフライン動作が一部効きません
-- 公開後に修正したいときは、ファイルを直して `git push` すれば更新されます
+- PWA は `https://` または `localhost` で有効
+- `file://` で直接開くとホーム画面追加やオフラインキャッシュは一部使えない

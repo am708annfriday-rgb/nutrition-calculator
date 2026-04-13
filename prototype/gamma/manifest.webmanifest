@@ -1,7 +1,7 @@
 {
-  "name": "栄養計算ツール",
-  "short_name": "栄養計算",
-  "description": "経腸栄養・静脈栄養の総カロリー、タンパク量、NPC/Nを計算するツール",
+  "name": "ガンマ計算ツール",
+  "short_name": "ガンマ計算",
+  "description": "体重、成分量、希釈総量、速度または投与量から双方向に計算するツール",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#f2efe7",

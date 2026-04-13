@@ -1,11 +1,10 @@
-const CACHE_NAME = "nutrition-calc-v2";
+const CACHE_NAME = "gamma-calc-v1";
 const ASSETS = [
   "./",
   "./index.html",
   "./styles.css",
   "./app.js",
   "./manifest.webmanifest",
-  "./products_master_sample.csv",
   "./icons/icon-192.png",
   "./icons/icon-512.png",
   "./icons/apple-touch-icon.png"
