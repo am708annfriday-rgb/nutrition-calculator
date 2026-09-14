@@ -41,9 +41,19 @@
       </section>
 
       <section class="group-panel">
+        <div class="section-title">経口薬（包数で入力）</div>
+        <p class="slot-meta">1日の合計包数を入力してください。カロリー・タンパク量のみ合計に加算します。脂質・炭水化物・容量・追加計算には含めません。</p>
+        <div class="slot-list" id="oralSlots"></div>
+        <div class="summary-card-block">
+          <h2>経口薬 合計値</h2>
+          <div id="oralSummary"></div>
+        </div>
+      </section>
+
+      <section class="group-panel">
         <div class="section-title">計算結果</div>
         <div class="summary-card-block">
-          <h2>経腸栄養 + 静脈栄養 合計値</h2>
+          <h2>経腸栄養 + 静脈栄養 + 経口薬 合計値</h2>
           <div id="totalSummary"></div>
         </div>
       </section>

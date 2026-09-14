@@ -1,6 +1,53 @@
 const EMPTY_PRODUCT_ID = "";
 
 const products = [
+  // Verified additions: see PRODUCT_SOURCES.md (2026-09-15).
+  {
+    id: "enteral-renalen-lp-125", name: "明治リーナレンLP 125mL", group: "EN",
+    packageMl: 125, kcalPerMl: 200 / 125, useLabelEnergy: true,
+    proteinPerMl: 2 / 125, fatPerMl: 5.6 / 125, carbPerMl: 36.6 / 125,
+    nitrogenPerMl: 2 / 6.25 / 125,
+    note: "メーカー表示値。炭水化物は食物繊維を含む。窒素量はタンパク質÷6.25の推定値"
+  },
+  {
+    id: "enteral-renalen-lp-250", name: "明治リーナレンLP Zパック400K 250mL", group: "EN",
+    packageMl: 250, kcalPerMl: 400 / 250, useLabelEnergy: true,
+    proteinPerMl: 4 / 250, fatPerMl: 11.2 / 250, carbPerMl: 73.2 / 250,
+    nitrogenPerMl: 4 / 6.25 / 250,
+    note: "メーカー標準組成。炭水化物は食物繊維を含む。窒素量はタンパク質÷6.25の推定値"
+  },
+  {
+    id: "enteral-hinex-renute", name: "ハイネックスリニュート 400mL", group: "EN",
+    packageMl: 400, kcalPerMl: 1, useLabelEnergy: true,
+    proteinPerMl: 6 / 100, fatPerMl: 5.6 / 100, carbPerMl: 7.1 / 100,
+    nitrogenPerMl: 6 / 6.25 / 100,
+    note: "メーカー標準組成。炭水化物は食物繊維を含む。窒素量はタンパク質÷6.25の推定値"
+  },
+  {
+    id: "enteral-isocal-clear", name: "アイソカル クリア（ピーチ風味）200mL", group: "EN",
+    packageMl: 200, kcalPerMl: 1, useLabelEnergy: true,
+    proteinPerMl: 10 / 200, fatPerMl: 0, carbPerMl: 40 / 200,
+    nitrogenPerMl: 10 / 6.25 / 200,
+    note: "メーカー表示値。レモンティー風味も同じ主要成分。窒素量はタンパク質÷6.25の推定値"
+  },
+  {
+    id: "oral-livact", name: "リーバクト配合顆粒 4.15g/包", group: "ORAL",
+    kcalPerPack: 16, proteinPerPack: 4,
+    note: "アミノ酸4gをタンパク量として加算。16kcalは4g×4kcal/gの換算値（添加剤を除く）"
+  },
+  {
+    id: "oral-aminoleban-en", name: "アミノレバンEN配合散 50g/包", group: "ORAL",
+    kcalPerPack: 213, proteinPerPack: 13.5,
+    note: "添付文書記載値。カロリーとタンパク量のみ加算（溶解水は容量に含めない）"
+  },
+  {
+    id: "pn-kidoparen", name: "キドパレン輸液 1050mL", group: "PN",
+    packageMl: 1050, kcalPerMl: 1500 / 1050, useLabelEnergy: true,
+    proteinPerMl: 32.847 / 1050, fatPerMl: 0, carbPerMl: 342.2 / 1050,
+    nitrogenPerMl: 4.56 / 1050, npcPerMl: 1369 / 1050,
+    note: "添付文書：混合後1バッグ。タンパク量は総遊離アミノ酸量、窒素・非蛋白熱量は記載値"
+  },
+
   {
     id: "enteral-peptamen-standard",
     name: "ペプタメンスタンダード",
@@ -395,6 +442,7 @@ const defaultRow = {
 
 const state = {
   enRows: Array.from({ length: 4 }, () => ({ ...defaultRow })),
+  oralRows: Array.from({ length: 2 }, () => ({ ...defaultRow, unit: "packs_day" })),
   pnRows: Array.from({ length: 4 }, () => ({ ...defaultRow })),
   weight: "",
   advancedMode: "none",
@@ -406,6 +454,8 @@ state.enRows[0] = { productId: "enteral-peptamen-af", amount: "20", unit: "ml_h"
 state.pnRows[0] = { productId: "pn-elneopa-2", amount: "20", unit: "ml_h" };
 
 const elements = {
+  oralSlots: document.querySelector("#oralSlots"),
+  oralSummary: document.querySelector("#oralSummary"),
   enSlots: document.querySelector("#enSlots"),
   pnSlots: document.querySelector("#pnSlots"),
   enSummary: document.querySelector("#enSummary"),
@@ -439,6 +489,7 @@ function formatNumber(value, digits = 1) {
 }
 
 function getUnitLabel(unit) {
+  if (unit === "packs_day") return "包/日";
   if (unit === "ml_h") return "mL/h";
   if (unit === "ml_day") return "mL/日";
   return "回/日";
@@ -449,6 +500,9 @@ function buildProductMeta(product) {
     return "未選択の枠です";
   }
 
+  if (product.group === "ORAL") {
+    return `1包 / ${formatNumber(product.kcalPerPack)}kcal / タンパク量 ${formatNumber(product.proteinPerPack)}g / ${product.note}`;
+  }
   const packageMl = product.packageMl || 0;
   const packageKcal = packageMl * (product.kcalPerMl || 0);
   const packageProtein = packageMl * (product.proteinPerMl || 0);
@@ -458,7 +512,7 @@ function buildProductMeta(product) {
   return [
     `1規格 ${formatNumber(packageMl, 0)}mL`,
     `${formatNumber(packageKcal, 1)}kcal`,
-    `糖質 ${formatNumber(packageCarb, 1)}g`,
+    `炭水化物 ${formatNumber(packageCarb, 1)}g`,
     `タンパク質 ${formatNumber(packageProtein, 1)}g`,
     `脂質 ${formatNumber(packageFat, 1)}g`,
     product.note
@@ -502,13 +556,18 @@ function calculateRow(row) {
     return { product: null, volumeMl: 0, kcal: 0, protein: 0, fat: 0, carb: 0, nitrogen: 0, npc: 0 };
   }
 
+  if (product.group === "ORAL") {
+    const packs = Math.max(0, Number(row.amount) || 0);
+    return { product, volumeMl: 0, kcal: packs * product.kcalPerPack,
+      protein: packs * product.proteinPerPack, fat: 0, carb: 0, nitrogen: 0, npc: 0 };
+  }
   const volumeMl = getDailyVolume(row, product);
   const protein = volumeMl * product.proteinPerMl;
   const fat = volumeMl * product.fatPerMl;
   const carb = volumeMl * product.carbPerMl;
   const nitrogen = volumeMl * product.nitrogenPerMl;
-  const kcal = protein * 4 + fat * 9 + carb * 4;
-  const npc = kcal - protein * 4;
+  const kcal = product.useLabelEnergy ? volumeMl * product.kcalPerMl : protein * 4 + fat * 9 + carb * 4;
+  const npc = product.npcPerMl != null ? volumeMl * product.npcPerMl : kcal - protein * 4;
 
   return { product, volumeMl, kcal, protein, fat, carb, nitrogen, npc };
 }
@@ -531,8 +590,8 @@ function sumRows(rows) {
 }
 
 function renderSlots(group) {
-  const container = group === "EN" ? elements.enSlots : elements.pnSlots;
-  const rows = group === "EN" ? state.enRows : state.pnRows;
+  const container = group === "ORAL" ? elements.oralSlots : group === "EN" ? elements.enSlots : elements.pnSlots;
+  const rows = getRowsByGroup(group);
 
   container.innerHTML = rows
     .map((row, index) => {
@@ -565,13 +624,14 @@ function renderSlots(group) {
               data-field="amount"
             />
             <select class="dose-unit" data-group="${group}" data-index="${index}" data-field="unit">
+              ${group === "ORAL" ? '<option value="packs_day">包/日</option>' : `
               <option value="ml_h" ${row.unit === "ml_h" ? "selected" : ""}>mL/h</option>
               <option value="ml_day" ${row.unit === "ml_day" ? "selected" : ""}>mL/日</option>
-              <option value="times_day" ${row.unit === "times_day" ? "selected" : ""}>回/日</option>
+              <option value="times_day" ${row.unit === "times_day" ? "selected" : ""}>回/日</option>`}
             </select>
           </div>
           <div class="slot-foot">
-            <div class="mini-metric"><span>容量</span><strong data-cell="volume">${formatNumber(result.volumeMl, 0)} mL</strong></div>
+            <div class="mini-metric ${group === "ORAL" ? "hidden" : ""}"><span>容量</span><strong data-cell="volume">${formatNumber(result.volumeMl, 0)} mL</strong></div>
             <div class="mini-metric"><span>kcal</span><strong data-cell="kcal">${formatNumber(result.kcal, 1)}</strong></div>
             <div class="mini-metric"><span>タンパク質</span><strong data-cell="protein">${formatNumber(result.protein, 1)} g</strong></div>
           </div>
@@ -605,10 +665,11 @@ function createSummaryTable(title, totals, unitSuffix = "") {
 function renderSummaries() {
   const enTotals = sumRows(state.enRows);
   const pnTotals = sumRows(state.pnRows);
+  const oralTotals = sumRows(state.oralRows);
   const totalTotals = {
     volumeMl: enTotals.volumeMl + pnTotals.volumeMl,
-    kcal: enTotals.kcal + pnTotals.kcal,
-    protein: enTotals.protein + pnTotals.protein,
+    kcal: enTotals.kcal + pnTotals.kcal + oralTotals.kcal,
+    protein: enTotals.protein + pnTotals.protein + oralTotals.protein,
     fat: enTotals.fat + pnTotals.fat,
     carb: enTotals.carb + pnTotals.carb,
     nitrogen: enTotals.nitrogen + pnTotals.nitrogen,
@@ -616,6 +677,7 @@ function renderSummaries() {
   };
   const weight = Number(state.weight) || 0;
 
+  elements.oralSummary.innerHTML = `<p>エネルギー：${formatNumber(oralTotals.kcal)} kcal ／ タンパク量：${formatNumber(oralTotals.protein)} g</p>`;
   elements.enSummary.innerHTML = createSummaryTable("経腸栄養剤 (EN) 合計値", enTotals);
   elements.pnSummary.innerHTML = createSummaryTable("静脈栄養剤 (PN) 合計値", pnTotals);
   elements.totalSummary.innerHTML = createSummaryTable("製剤合計値", totalTotals);
@@ -647,7 +709,7 @@ function renderAdvanced(totals, weight) {
       <div class="advanced-panel-inner">
         <div class="advanced-card">
           <h3>NPC/N</h3>
-          <div class="advanced-formula">非タンパクカロリー = 総エネルギー - タンパク質(g) × 4</div>
+          <div class="advanced-formula">経腸・静脈栄養のみ（経口薬は対象外）。非タンパクカロリーは製品記載値、またはエネルギー − タンパク質(g) × 4</div>
           <div class="advanced-grid">
             <div class="advanced-value"><span>非タンパクカロリー</span><strong>${formatNumber(totals.npc, 1)} kcal</strong></div>
             <div class="advanced-value"><span>窒素量</span><strong>${formatNumber(totals.nitrogen, 2)} g</strong></div>
@@ -670,7 +732,7 @@ function renderAdvanced(totals, weight) {
       <div class="advanced-card">
         <h3>窒素バランス計算</h3>
         <div class="advanced-formula">
-          窒素イン = 総タンパク質 / 6.25<br />
+          経腸・静脈栄養のみ（経口薬は対象外）。窒素インは製品の窒素量の合計（未記載製品はタンパク質 / 6.25で推定）<br />
           窒素アウト = 尿量(mL) × 尿中UN濃度(mg/dL) / 100000 + 体重 × 0.031
         </div>
         <div class="advanced-grid">
@@ -690,11 +752,12 @@ function renderAdvanced(totals, weight) {
 function render() {
   renderSlots("EN");
   renderSlots("PN");
+  renderSlots("ORAL");
   renderSummaries();
 }
 
 function refreshSlotCard(group, index) {
-  const container = group === "EN" ? elements.enSlots : elements.pnSlots;
+  const container = group === "ORAL" ? elements.oralSlots : group === "EN" ? elements.enSlots : elements.pnSlots;
   const row = getRowsByGroup(group)[index];
   const card = container.querySelector(`.slot-card[data-group="${group}"][data-index="${index}"]`);
   if (!card || !row) {
@@ -720,7 +783,7 @@ function refreshSlotCard(group, index) {
 }
 
 function getRowsByGroup(group) {
-  return group === "EN" ? state.enRows : state.pnRows;
+  return { EN: state.enRows, PN: state.pnRows, ORAL: state.oralRows }[group];
 }
 
 document.addEventListener("input", (event) => {
