@@ -313,18 +313,6 @@ const products = [
     note: "PDF掲載: 400kcal/L"
   },
   {
-    id: "pn-kidoparen",
-    name: "キドパレン輸液",
-    group: "PN",
-    packageMl: 1050,
-    kcalPerMl: 1500 / 1050,
-    proteinPerMl: 32.847 / 1050,
-    fatPerMl: 0,
-    carbPerMl: 342.2 / 1050,
-    nitrogenPerMl: 4.56 / 1050,
-    note: "添付文書: 1050mL中 総遊離アミノ酸32.847g・総熱量1500kcal"
-  },
-  {
     id: "pn-aminoleban-500",
     name: "アミノレバン点滴静注 500mL",
     group: "PN",
