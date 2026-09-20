@@ -329,12 +329,10 @@ function cardMarkup(card, index) {
   if (!drug) {
     return `
       <article class="drug-card empty">
-        <div class="field-card">
-          <label class="field-label" for="drug-select-${card.cardId}">薬剤選択</label>
+        <div class="drug-select-row">
           <select id="drug-select-${card.cardId}" data-card-id="${card.cardId}" data-field="drugId">
             ${drugOptions(card.drugId)}
           </select>
-          <p class="empty-copy">選択した薬剤だけ表示されます。</p>
         </div>
       </article>
     `;
@@ -343,10 +341,7 @@ function cardMarkup(card, index) {
   return `
     <article class="drug-card">
       <div class="card-top">
-        <div>
-          <h3 class="card-title">${index + 1}. ${escapeAttribute(drug.name)}</h3>
-          <p class="card-subtitle">体重・調製内容・片側入力から自動計算します。</p>
-        </div>
+        <h3 class="card-title">${index + 1}. ${escapeAttribute(drug.name)}</h3>
         <div class="card-actions">
           <button type="button" class="ghost-button" data-action="reset-defaults" data-card-id="${card.cardId}">標準に戻す</button>
           <button type="button" class="danger-button" data-action="remove-card" data-card-id="${card.cardId}">削除</button>
@@ -355,21 +350,25 @@ function cardMarkup(card, index) {
 
       <div class="card-grid">
         <div class="compact-grid">
-          <div class="field-card">
-            <label class="field-label" for="drug-select-${card.cardId}">薬剤</label>
+          <div class="drug-select-row">
             <select id="drug-select-${card.cardId}" data-card-id="${card.cardId}" data-field="drugId">
               ${drugOptions(card.drugId)}
             </select>
           </div>
-          <div class="field-card">
+        </div>
+
+        <div class="recommendation-panel">
+          <div class="recommendation">${drug.recommendation || "参考用量は未設定です。"}</div>
+        </div>
+
+        <div class="mode-row field-card">
             <label class="field-label" for="mode-${card.cardId}">計算方法</label>
             <select id="mode-${card.cardId}" data-card-id="${card.cardId}" data-field="mode">
               ${modeOptions(card.mode)}
             </select>
-          </div>
         </div>
 
-        <div class="input-grid">
+        <div class="prep-grid">
           <div class="field-card">
             <label class="field-label" for="amount-${card.cardId}">成分量</label>
             <div class="input-with-unit">
@@ -402,7 +401,8 @@ function cardMarkup(card, index) {
           </div>
         </div>
 
-        <div class="input-grid">
+        <div class="input-grid single-input">
+          ${card.mode === "rate" ? `
           <div class="field-card">
             <label class="field-label" for="rate-${card.cardId}">速度</label>
             <div class="input-with-unit">
@@ -411,6 +411,7 @@ function cardMarkup(card, index) {
             </div>
           </div>
 
+          ` : `
           <div class="field-card">
             <label class="field-label" for="dose-${card.cardId}">目標投与量</label>
             <div class="input-with-unit">
@@ -418,6 +419,7 @@ function cardMarkup(card, index) {
               <span>${drug.doseUnit}</span>
             </div>
           </div>
+          `}
         </div>
 
         <div class="result-panel ${evaluated.resultError ? "error" : ""}">
@@ -426,16 +428,6 @@ function cardMarkup(card, index) {
           <div class="result-help">${evaluated.resultHelp}</div>
         </div>
 
-        <div class="field-card">
-          <div class="note-list">
-            <div class="note-chip"><strong>体重</strong> ${escapeAttribute(state.weight || "--")} kg</div>
-            <div class="note-chip"><strong>入力</strong> ${card.mode === "rate" ? "速度" : "投与量"}</div>
-          </div>
-          <details>
-            <summary>参考用量を見る</summary>
-            <div class="recommendation">${drug.recommendation || "参考文言は未設定です。"}</div>
-          </details>
-        </div>
       </div>
     </article>
   `;

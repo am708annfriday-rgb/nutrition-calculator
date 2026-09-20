@@ -30,6 +30,11 @@ select {
   font: inherit;
 }
 
+input,
+select {
+  font-size: 16px;
+}
+
 body {
   min-height: 100vh;
 }
@@ -46,7 +51,7 @@ body {
 .topbar-inner {
   width: min(760px, calc(100% - 20px));
   margin: 0 auto;
-  padding: 14px 0 12px;
+  padding: 10px 0 8px;
 }
 
 .topbar h1 {
@@ -64,12 +69,11 @@ body {
 .app-shell {
   width: min(760px, calc(100% - 20px));
   margin: 0 auto;
-  padding: 14px 0 28px;
+  padding: 10px 0 20px;
 }
 
 .hero-card,
 .board-card,
-.notice-card,
 .drug-card {
   background: var(--card);
   border: 1px solid var(--line);
@@ -78,30 +82,16 @@ body {
 }
 
 .hero-card {
-  display: grid;
-  gap: 14px;
-  padding: 16px;
-}
-
-.hero-lead {
-  margin: 0;
-  font-size: 20px;
-  font-weight: 700;
-  line-height: 1.45;
-}
-
-.hero-copy {
-  margin: 6px 0 0;
-  color: var(--muted);
-  font-size: 13px;
-  line-height: 1.6;
+  padding: 10px;
 }
 
 .weight-panel {
   display: grid;
-  gap: 8px;
-  padding: 12px;
-  border-radius: 18px;
+  grid-template-columns: auto minmax(0, 180px);
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 14px;
   background: var(--blue-soft);
 }
 
@@ -110,10 +100,9 @@ body {
   font-weight: 700;
 }
 
-.board-card,
-.notice-card {
-  margin-top: 14px;
-  padding: 16px;
+.board-card {
+  margin-top: 10px;
+  padding: 12px;
 }
 
 .board-header {
@@ -121,24 +110,12 @@ body {
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  margin-bottom: 14px;
+  margin-bottom: 10px;
 }
 
-.board-header h2,
-.notice-card h2 {
+.board-header h2 {
   margin: 0 0 4px;
   font-size: 18px;
-}
-
-.board-header p,
-.notice-card p,
-.field-help,
-.card-subtitle,
-.empty-copy {
-  margin: 0;
-  color: var(--muted);
-  font-size: 13px;
-  line-height: 1.55;
 }
 
 .primary-button,
@@ -167,21 +144,23 @@ body {
 
 .drug-card-list {
   display: grid;
-  gap: 12px;
+  gap: 10px;
 }
 
 .drug-card {
-  padding: 14px;
+  padding: 12px;
 }
 
 .drug-card.empty {
-  padding: 16px;
+  padding: 10px;
 }
 
 .card-top {
-  display: grid;
-  gap: 10px;
-  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
 }
 
 .card-title {
@@ -198,21 +177,34 @@ body {
 
 .card-grid {
   display: grid;
-  gap: 10px;
+  gap: 8px;
 }
 
 .compact-grid,
 .input-grid,
+.prep-grid,
 .summary-row {
   display: grid;
-  gap: 10px;
+  gap: 8px;
+}
+
+.prep-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.input-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.summary-row {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
 .field-card {
   display: grid;
   gap: 6px;
-  padding: 12px;
-  border-radius: 16px;
+  padding: 9px;
+  border-radius: 14px;
   background: #f9fbfe;
   border: 1px solid #edf1f7;
 }
@@ -241,7 +233,7 @@ select {
   border: 1px solid var(--line);
   border-radius: 14px;
   background: #fff;
-  padding: 12px 13px;
+  padding: 10px 11px;
   color: var(--text);
 }
 
@@ -278,9 +270,9 @@ button:focus {
 
 .result-panel {
   display: grid;
-  gap: 8px;
-  padding: 14px;
-  border-radius: 18px;
+  gap: 5px;
+  padding: 11px 12px;
+  border-radius: 14px;
   background: linear-gradient(180deg, var(--blue), var(--blue-dark));
   color: #fff;
 }
@@ -295,7 +287,7 @@ button:focus {
 }
 
 .result-value {
-  font-size: 34px;
+  font-size: 30px;
   line-height: 1.1;
   font-weight: 700;
   word-break: break-word;
@@ -307,59 +299,110 @@ button:focus {
   opacity: 0.92;
 }
 
-.note-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.note-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 7px 10px;
-  border-radius: 999px;
-  background: #fff;
-  border: 1px solid var(--line);
-  color: var(--muted);
-  font-size: 12px;
-}
-
-.note-chip strong {
-  color: var(--text);
+.recommendation-panel {
+  padding: 12px 14px;
+  border: 2px solid #f0b94b;
+  border-radius: 14px;
+  background: #fff9e9;
 }
 
 .recommendation {
   white-space: pre-wrap;
+  font-size: 18px;
+  font-weight: 650;
+  line-height: 1.5;
+}
+
+.drug-select-row select {
+  padding-block: 10px;
+}
+
+.mode-row {
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+}
+
+.prep-grid .field-card {
+  gap: 2px;
+  padding: 5px 6px;
+}
+
+.prep-grid .field-label,
+.prep-grid .input-with-unit span {
+  font-size: 12px;
+}
+
+.prep-grid input {
+  font-size: 14px;
+  padding: 5px 6px;
+  min-height: 30px;
+  border-radius: 9px;
+}
+
+.summary-row {
+  gap: 5px;
+}
+
+.summary-row .mini-kpi {
+  gap: 2px;
+  padding: 6px;
+  border-radius: 9px;
+  min-width: 0;
+}
+
+.summary-row .mini-kpi span {
+  font-size: 11px;
+}
+
+.summary-row .mini-kpi strong {
   font-size: 13px;
-  line-height: 1.65;
+  overflow-wrap: anywhere;
 }
 
-details summary {
-  cursor: pointer;
-  list-style: none;
-  font-weight: 700;
+.card-actions {
+  flex-shrink: 0;
+  gap: 4px;
 }
 
-details summary::-webkit-details-marker {
-  display: none;
+.card-actions button {
+  padding: 8px 10px;
+  font-size: 12px;
+  min-height: 36px;
 }
 
-@media (min-width: 700px) {
-  .hero-card {
-    grid-template-columns: 1.5fr 220px;
-    align-items: start;
+
+@media (max-width: 420px) {
+  .prep-grid .input-with-unit {
+    gap: 4px;
   }
 
-  .compact-grid {
-    grid-template-columns: 1.2fr 0.8fr;
+  .prep-grid input {
+    padding-inline: 8px;
   }
 
-  .input-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+  .input-grid .field-card,
+  .summary-row .mini-kpi {
+    padding: 7px;
   }
 
-  .summary-row {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+  .input-grid .input-with-unit {
+    gap: 4px;
   }
+
+  .input-grid .input-with-unit span {
+    font-size: 11px;
+  }
+
+  .summary-row .mini-kpi strong {
+    font-size: 12px;
+  }
+}
+
+.input-grid.single-input {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.single-input .field-card {
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
 }
