@@ -1,5 +1,28 @@
 const EMPTY_PRODUCT_ID = "";
 
+// 元資料の mg（元素量）を 1 包装あたりの mEq / mmol に換算する。
+// 原子量: IUPAC/CIAAW。未記載の成分は null のまま保持する。
+const ELECTROLYTE_KEYS = ["sodium", "potassium", "chloride", "calcium", "magnesium", "phosphorus"];
+const ELECTROLYTE_LABELS = { sodium: "Na", potassium: "K", chloride: "Cl", calcium: "Ca", magnesium: "Mg", phosphorus: "P" };
+const ATOMIC_WEIGHTS = { sodium: 22.98976928, potassium: 39.0983, chloride: 35.45,
+  calcium: 40.078, magnesium: 24.305, phosphorus: 30.973761998 };
+const VALENCES = { sodium: 1, potassium: 1, chloride: 1, calcium: 2, magnesium: 2, phosphorus: 1 };
+const ELECTROLYTE_FIELDS = {
+  sodium: "sodiumMeqPerPackage", potassium: "potassiumMeqPerPackage",
+  chloride: "chlorideMeqPerPackage", calcium: "calciumMeqPerPackage",
+  magnesium: "magnesiumMeqPerPackage", phosphorus: "phosphorusMmolPerPackage"
+};
+
+function electrolytesFromMg(values) {
+  return Object.fromEntries(ELECTROLYTE_KEYS.map((key) => [ELECTROLYTE_FIELDS[key],
+    values[key] == null ? null : values[key] * VALENCES[key] / ATOMIC_WEIGHTS[key]]));
+}
+
+function electrolytesFromPerLiter(values, packageMl) {
+  return Object.fromEntries(ELECTROLYTE_KEYS.map((key) => [ELECTROLYTE_FIELDS[key],
+    values[key] == null ? null : values[key] * packageMl / 1000]));
+}
+
 const products = [
   // Verified additions: see PRODUCT_SOURCES.md (2026-09-15).
   {
@@ -7,6 +30,7 @@ const products = [
     packageMl: 125, kcalPerMl: 200 / 125, useLabelEnergy: true,
     proteinPerMl: 2 / 125, fatPerMl: 5.6 / 125, carbPerMl: 36.6 / 125,
     nitrogenPerMl: 2 / 6.25 / 125,
+    electrolytes: electrolytesFromMg({ sodium: 60, potassium: 60, chloride: 15, calcium: 60, magnesium: 30, phosphorus: 40 }),
     note: "メーカー表示値。炭水化物は食物繊維を含む。窒素量はタンパク質÷6.25の推定値"
   },
   {
@@ -14,6 +38,7 @@ const products = [
     packageMl: 250, kcalPerMl: 400 / 250, useLabelEnergy: true,
     proteinPerMl: 4 / 250, fatPerMl: 11.2 / 250, carbPerMl: 73.2 / 250,
     nitrogenPerMl: 4 / 6.25 / 250,
+    electrolytes: electrolytesFromMg({ sodium: 120, potassium: 120, chloride: 30, calcium: 120, magnesium: 60, phosphorus: 80 }),
     note: "メーカー標準組成。炭水化物は食物繊維を含む。窒素量はタンパク質÷6.25の推定値"
   },
   {
@@ -58,6 +83,7 @@ const products = [
     fatPerMl: 12 / 200,
     carbPerMl: 37.5 / 200,
     nitrogenPerMl: 10.5 / 6.25 / 200,
+    electrolytes: electrolytesFromMg({ sodium: 430, potassium: 320, chloride: 300, calcium: 234, magnesium: 108, phosphorus: 170 }),
     note: "添付資料: 300kcal/200mL"
   },
   {
@@ -70,6 +96,7 @@ const products = [
     fatPerMl: 0.066,
     carbPerMl: 0.132,
     nitrogenPerMl: 0.0152,
+    electrolytes: electrolytesFromMg({ sodium: 240, potassium: 464, chloride: 162, calcium: 202, magnesium: 62, phosphorus: 170 }),
     note: "PDF掲載: 300kcal/200mL"
   },
   {
@@ -118,6 +145,7 @@ const products = [
     fatPerMl: 0.0448,
     carbPerMl: 0.2512,
     nitrogenPerMl: 0.009,
+    electrolytes: electrolytesFromMg({ sodium: 120, potassium: 60, chloride: 20, calcium: 60, magnesium: 30, phosphorus: 70 }),
     note: "PDF掲載: 200kcal/125mL"
   },
   {
@@ -190,6 +218,7 @@ const products = [
     fatPerMl: 0,
     carbPerMl: 10 / 1000,
     nitrogenPerMl: 0,
+    electrolytes: electrolytesFromPerLiter({ sodium: 140, potassium: 4, chloride: 115, calcium: 3, magnesium: 2 }, 500),
     note: "まとめPDF掲載: G10・40kcal/L"
   },
   {
@@ -202,6 +231,7 @@ const products = [
     fatPerMl: 0,
     carbPerMl: 0,
     nitrogenPerMl: 0,
+    electrolytes: electrolytesFromPerLiter({ sodium: 130, potassium: 4, chloride: 109, calcium: 3 }, 500),
     note: "添付文書: 500mL中 電解質のみ・熱量記載なし"
   },
   {
@@ -214,6 +244,7 @@ const products = [
     fatPerMl: 0,
     carbPerMl: 50 / 1000,
     nitrogenPerMl: 0,
+    electrolytes: electrolytesFromPerLiter({ sodium: 131, potassium: 4, chloride: 109, calcium: 3 }, 500),
     note: "まとめPDF掲載: G50・200kcal/L"
   },
   {
@@ -226,6 +257,7 @@ const products = [
     fatPerMl: 0,
     carbPerMl: 0,
     nitrogenPerMl: 0,
+    electrolytes: electrolytesFromPerLiter({ sodium: 131, potassium: 4, chloride: 109, calcium: 3 }, 500),
     note: "添付文書: 500mL中 電解質のみ・熱量記載なし"
   },
   {
@@ -250,6 +282,7 @@ const products = [
     fatPerMl: 0,
     carbPerMl: 21.5 / 500,
     nitrogenPerMl: 0,
+    electrolytes: electrolytesFromPerLiter({ sodium: 35, potassium: 20, chloride: 35 }, 500),
     note: "添付文書: 500mL中 ブドウ糖21.5g・86kcal"
   },
   {
@@ -262,6 +295,7 @@ const products = [
     fatPerMl: 0,
     carbPerMl: 100 / 1000,
     nitrogenPerMl: 0,
+    electrolytes: electrolytesFromPerLiter({ sodium: 35, potassium: 20, chloride: 28, calcium: 5, magnesium: 3, phosphorus: 10 }, 500),
     note: "まとめPDF掲載: G100・400kcal/L"
   },
   {
@@ -274,6 +308,7 @@ const products = [
     fatPerMl: 0,
     carbPerMl: 75 / 1000,
     nitrogenPerMl: 0,
+    electrolytes: electrolytesFromPerLiter({ sodium: 35, potassium: 20, chloride: 35 }, 500),
     note: "まとめPDF掲載: G75・300kcal/L"
   },
   {
@@ -286,6 +321,8 @@ const products = [
     fatPerMl: 0,
     carbPerMl: 0.12,
     nitrogenPerMl: 0.00313,
+    electrolytes: { sodiumMeqPerPackage: 50, potassiumMeqPerPackage: 22, chlorideMeqPerPackage: 50,
+      calciumMeqPerPackage: 4, magnesiumMeqPerPackage: 4, phosphorusMmolPerPackage: 250 / ATOMIC_WEIGHTS.phosphorus },
     note: "PDF掲載: 560kcal/1000mL"
   },
   {
@@ -298,6 +335,8 @@ const products = [
     fatPerMl: 0,
     carbPerMl: 0.175,
     nitrogenPerMl: 0.0047,
+    electrolytes: { sodiumMeqPerPackage: 50, potassiumMeqPerPackage: 27, chlorideMeqPerPackage: 50,
+      calciumMeqPerPackage: 5, magnesiumMeqPerPackage: 5, phosphorusMmolPerPackage: 250 / ATOMIC_WEIGHTS.phosphorus },
     note: "PDF掲載: 820kcal/1000mL"
   },
   {
@@ -334,6 +373,8 @@ const products = [
     fatPerMl: 0,
     carbPerMl: 120 / 903,
     nitrogenPerMl: 3.12 / 903,
+    electrolytes: { sodiumMeqPerPackage: 50, potassiumMeqPerPackage: 30, chlorideMeqPerPackage: 49,
+      calciumMeqPerPackage: 8.5, magnesiumMeqPerPackage: 10, phosphorusMmolPerPackage: 6 },
     note: "PDF掲載: 560kcal/903mL"
   },
   {
@@ -346,6 +387,8 @@ const products = [
     fatPerMl: 0,
     carbPerMl: 180 / 1003,
     nitrogenPerMl: 4.68 / 1003,
+    electrolytes: { sodiumMeqPerPackage: 50, potassiumMeqPerPackage: 30, chlorideMeqPerPackage: 49,
+      calciumMeqPerPackage: 8.5, magnesiumMeqPerPackage: 10, phosphorusMmolPerPackage: 250 / ATOMIC_WEIGHTS.phosphorus },
     note: "PDF掲載: 840kcal/1003mL"
   },
   {
@@ -358,6 +401,8 @@ const products = [
     fatPerMl: 0,
     carbPerMl: 250 / 1103,
     nitrogenPerMl: 6.23 / 1103,
+    electrolytes: { sodiumMeqPerPackage: 50, potassiumMeqPerPackage: 30, chlorideMeqPerPackage: 49,
+      calciumMeqPerPackage: 8.5, magnesiumMeqPerPackage: 10, phosphorusMmolPerPackage: 250 / ATOMIC_WEIGHTS.phosphorus },
     note: "PDF掲載: 1160kcal/1103mL"
   },
   {
@@ -438,9 +483,6 @@ const state = {
   urineUN: ""
 };
 
-state.enRows[0] = { productId: "enteral-peptamen-af", amount: "20", unit: "ml_h" };
-state.pnRows[0] = { productId: "pn-elneopa-2", amount: "20", unit: "ml_h" };
-
 const elements = {
   oralSlots: document.querySelector("#oralSlots"),
   oralSummary: document.querySelector("#oralSummary"),
@@ -450,6 +492,8 @@ const elements = {
   pnSummary: document.querySelector("#pnSummary"),
   totalSummary: document.querySelector("#totalSummary"),
   perKgSummary: document.querySelector("#perKgSummary"),
+  npcnSummary: document.querySelector("#npcnSummary"),
+  electrolyteSummary: document.querySelector("#electrolyteSummary"),
   advancedPanel: document.querySelector("#advancedPanel"),
   bodyWeight: document.querySelector("#bodyWeight"),
   advancedMode: document.querySelector("#advancedMode")
@@ -474,6 +518,10 @@ function formatNumber(value, digits = 1) {
     minimumFractionDigits: 0,
     maximumFractionDigits: digits
   }).format(value);
+}
+
+function formatElectrolyte(value) {
+  return value > 0 && value < 0.005 ? "<0.01" : formatNumber(value, 2);
 }
 
 function getUnitLabel(unit) {
@@ -577,11 +625,29 @@ function sumRows(rows) {
   );
 }
 
+function renderRowElectrolytes(row, product) {
+  if (!product || product.group === "ORAL" || !(Number(row.amount) > 0)) return "";
+  const ratio = getDailyVolume(row, product) / product.packageMl;
+  const cells = ELECTROLYTE_KEYS.map((key) => {
+    const value = product.electrolytes?.[ELECTROLYTE_FIELDS[key]];
+    const unit = key === "phosphorus" ? "mmol" : "mEq";
+    return { key, value, unit };
+  });
+  if (cells.every(({ value }) => value == null || !Number.isFinite(value))) {
+    return '<div class="slot-electrolytes"><span class="slot-electrolytes-title">電解質 / 日</span><span class="slot-electrolytes-unknown">電解質データ未登録</span></div>';
+  }
+  return `<div class="slot-electrolytes"><span class="slot-electrolytes-title">電解質 / 日</span><div class="slot-electrolytes-grid">${cells.map(({ key, value, unit }) =>
+    `<div class="slot-electrolyte"><span>${ELECTROLYTE_LABELS[key]}</span><strong>${value == null || !Number.isFinite(value) ? "未登録" : `${formatElectrolyte(value * ratio)} ${unit}`}</strong></div>`).join("")}</div></div>`;
+}
+
 function renderSlots(group) {
   const container = group === "ORAL" ? elements.oralSlots : group === "EN" ? elements.enSlots : elements.pnSlots;
   const rows = getRowsByGroup(group);
+  // 入力済みの後続行を残し、その直後に未選択行を一つだけ表示する。
+  const lastUsedIndex = rows.findLastIndex((row) => row.productId || row.amount !== "");
+  const visibleCount = Math.min(rows.length, Math.max(1, lastUsedIndex + 2));
 
-  container.innerHTML = rows
+  container.innerHTML = rows.slice(0, visibleCount)
     .map((row, index) => {
       const result = calculateRow(row);
       const product = result.product;
@@ -590,17 +656,17 @@ function renderSlots(group) {
       return `
         <article class="slot-card" data-group="${group}" data-index="${index}">
           <div class="slot-header">
-            <span class="slot-index">${index + 1}枠目</span>
+            <span class="slot-index">${group === "ORAL" ? "経口薬" : "製剤"}${index + 1}</span>
             <span class="slot-badge" data-cell="badge">${product ? getUnitLabel(row.unit) : "未選択"}</span>
           </div>
-          <select class="slot-select" data-group="${group}" data-index="${index}" data-field="productId">
+          <div class="slot-fields ${showInputs ? "" : "single"}"><select class="slot-select" aria-label="${group === "ORAL" ? "経口薬" : "製剤"}${index + 1}の製品" data-group="${group}" data-index="${index}" data-field="productId">
             ${createOptions(group, row.productId)}
           </select>
-          <p class="slot-meta" data-cell="meta">${meta}</p>
           <div class="${showInputs ? "" : "hidden"}" data-input-area>
           <div class="dose-row">
             <input
               class="dose-input"
+              aria-label="${group === "ORAL" ? "経口薬" : "製剤"}${index + 1}の投与量"
               type="number"
               min="0"
               step="0.1"
@@ -618,12 +684,19 @@ function renderSlots(group) {
               <option value="times_day" ${row.unit === "times_day" ? "selected" : ""}>回/日</option>`}
             </select>
           </div>
+          </div>
+          </div>
+          <details class="slot-info ${showInputs ? "" : "hidden"}" data-info>
+            <summary>製品情報</summary><p class="slot-meta" data-cell="meta">${meta}</p>
+          </details>
+          <div class="${showInputs ? "" : "hidden"}" data-metrics>
           <div class="slot-foot">
             <div class="mini-metric ${group === "ORAL" ? "hidden" : ""}"><span>容量</span><strong data-cell="volume">${formatNumber(result.volumeMl, 0)} mL</strong></div>
             <div class="mini-metric"><span>kcal</span><strong data-cell="kcal">${formatNumber(result.kcal, 1)}</strong></div>
             <div class="mini-metric"><span>タンパク質</span><strong data-cell="protein">${formatNumber(result.protein, 1)} g</strong></div>
           </div>
           </div>
+          <div data-cell="electrolytes">${renderRowElectrolytes(row, product)}</div>
         </article>
       `;
     })
@@ -682,38 +755,65 @@ function renderSummaries() {
     elements.perKgSummary.innerHTML = `<div class="advanced-card"><div class="advanced-formula">体重を入力すると /kg 計算を表示します。</div></div>`;
   }
 
+  elements.npcnSummary.innerHTML = renderNpcnSummary(totalTotals);
+  elements.electrolyteSummary.innerHTML = renderElectrolytes(weight);
   renderAdvanced(totalTotals, weight);
 }
 
+function calculateElectrolytes(rows) {
+  const totals = Object.fromEntries(ELECTROLYTE_KEYS.map((key) => [key, 0]));
+  const missing = Object.fromEntries(ELECTROLYTE_KEYS.map((key) => [key, new Set()]));
+  let doseCount = 0;
+  for (const row of rows) {
+    const product = findProduct(row.productId);
+    if (!product || !(Number(row.amount) > 0)) continue;
+    doseCount += 1;
+    const ratio = getDailyVolume(row, product) / product.packageMl;
+    for (const key of ELECTROLYTE_KEYS) {
+      const value = product.electrolytes?.[ELECTROLYTE_FIELDS[key]];
+      if (value == null || !Number.isFinite(value)) missing[key].add(product.name);
+      else totals[key] += ratio * value;
+    }
+  }
+  return { totals, missing, doseCount };
+}
+
+function renderElectrolytes(weight) {
+  const { totals, missing, doseCount } = calculateElectrolytes([...state.enRows, ...state.pnRows]);
+  if (!doseCount) return '<div class="advanced-card"><h3>電解質</h3><p class="electrolyte-note">製剤の投与量を入力すると電解質を表示します。</p></div>';
+  const missingProducts = new Set(ELECTROLYTE_KEYS.flatMap((key) => [...missing[key]]));
+  const rows = ELECTROLYTE_KEYS.map((key) => {
+    const unit = key === "phosphorus" ? "mmol" : "mEq";
+    const unknown = missing[key].size > 0;
+    return `<tr><th scope="row">${ELECTROLYTE_LABELS[key]}</th><td>${unknown ? '<span title="電解質データ未登録">未登録あり</span>' : `${formatElectrolyte(totals[key])} ${unit}`}</td>${weight > 0 ? `<td>${unknown ? "—" : formatElectrolyte(totals[key] / weight)}</td>` : ""}</tr>`;
+  }).join("");
+  return `<div class="advanced-card"><h3>電解質</h3>
+    <table class="electrolyte-table"><thead><tr><th>成分</th><th>/day</th>${weight > 0 ? "<th>/kg/day</th>" : ""}</tr></thead><tbody>${rows}</tbody></table>
+    ${missingProducts.size ? `<p class="electrolyte-note">電解質データ未登録の成分を含むため、「未登録あり」の行は合計を表示しません。対象製剤：${[...missingProducts].join("、")}</p>` : ""}
+    <p class="electrolyte-note">/kg/day の単位は各行の /day と同じです。経腸栄養・静脈栄養／輸液のみ。経口薬は対象外です。</p></div>`;
+}
+
+function renderNpcnSummary(totals) {
+  const npcn = totals.nitrogen > 0 ? formatNumber(totals.npc / totals.nitrogen, 1) : "—";
+  return `<div class="advanced-card">
+    <h3>NPC/N</h3>
+    <div class="advanced-formula">経腸・静脈栄養のみ（経口薬は対象外）。非タンパクカロリーは製品記載値、またはエネルギー − タンパク質(g) × 4</div>
+    <div class="advanced-grid">
+      <div class="advanced-value"><span>非タンパクカロリー</span><strong>${formatNumber(totals.npc, 1)} kcal</strong></div>
+      <div class="advanced-value"><span>窒素量</span><strong>${formatNumber(totals.nitrogen, 2)} g</strong></div>
+      <div class="advanced-value"><span>NPC/N</span><strong>${npcn}</strong></div>
+    </div>
+    ${totals.nitrogen > 0 ? "" : '<p class="electrolyte-note">窒素量が0のためNPC/Nは計算できません。</p>'}
+  </div>`;
+}
+
 function renderAdvanced(totals, weight) {
-  if (state.advancedMode === "none") {
+  if (state.advancedMode !== "nitrogen-balance") {
     elements.advancedPanel.innerHTML = "";
     return;
   }
 
-  if (state.advancedMode === "npcn") {
-    const npcn = totals.nitrogen > 0 ? totals.npc / totals.nitrogen : 0;
-    elements.advancedPanel.innerHTML = `
-      <div class="advanced-panel-inner">
-        <div class="advanced-card">
-          <h3>NPC/N</h3>
-          <div class="advanced-formula">経腸・静脈栄養のみ（経口薬は対象外）。非タンパクカロリーは製品記載値、またはエネルギー − タンパク質(g) × 4</div>
-          <div class="advanced-grid">
-            <div class="advanced-value"><span>非タンパクカロリー</span><strong>${formatNumber(totals.npc, 1)} kcal</strong></div>
-            <div class="advanced-value"><span>窒素量</span><strong>${formatNumber(totals.nitrogen, 2)} g</strong></div>
-            <div class="advanced-value"><span>NPC/N</span><strong>${formatNumber(npcn, 1)}</strong></div>
-          </div>
-        </div>
-      </div>
-    `;
-    return;
-  }
-
-  const urineVolume = Number(state.urineVolume) || 0;
-  const urineUN = Number(state.urineUN) || 0;
-  const nitrogenIn = totals.nitrogen;
-  const nitrogenOut = urineVolume * urineUN / 100000 + weight * 0.031;
-  const balance = nitrogenIn - nitrogenOut;
+  const { nitrogenIn, nitrogenOut, balance } = calculateNitrogenBalance(totals, weight);
 
   elements.advancedPanel.innerHTML = `
     <div class="advanced-panel-inner">
@@ -728,13 +828,29 @@ function renderAdvanced(totals, weight) {
           <input class="advanced-input" id="urineVolume" type="number" min="0" step="1" inputmode="decimal" value="${state.urineVolume}" />
           <label class="field-label" for="urineUN">尿中UN濃度 (mg/dL)</label>
           <input class="advanced-input" id="urineUN" type="number" min="0" step="0.1" inputmode="decimal" value="${state.urineUN}" />
-          <div class="advanced-value"><span>窒素イン</span><strong>${formatNumber(nitrogenIn, 2)} g</strong></div>
-          <div class="advanced-value"><span>窒素アウト</span><strong>${formatNumber(nitrogenOut, 3)} g</strong></div>
-          <div class="advanced-value"><span>窒素バランス</span><strong>${formatNumber(balance, 3)} g</strong></div>
+          <div class="advanced-value"><span>窒素イン</span><strong data-balance="in">${formatNumber(nitrogenIn, 2)} g</strong></div>
+          <div class="advanced-value"><span>窒素アウト</span><strong data-balance="out">${formatNumber(nitrogenOut, 3)} g</strong></div>
+          <div class="advanced-value"><span>窒素バランス</span><strong data-balance="net">${formatNumber(balance, 3)} g</strong></div>
         </div>
       </div>
     </div>
   `;
+}
+
+function calculateNitrogenBalance(totals, weight) {
+  const nitrogenIn = totals.nitrogen;
+  const nitrogenOut = (Number(state.urineVolume) || 0) * (Number(state.urineUN) || 0) / 100000 + weight * 0.031;
+  return { nitrogenIn, nitrogenOut, balance: nitrogenIn - nitrogenOut };
+}
+
+function refreshNitrogenBalanceValues() {
+  const totals = sumRows([...state.enRows, ...state.pnRows]);
+  const { nitrogenIn, nitrogenOut, balance } = calculateNitrogenBalance(totals, Number(state.weight) || 0);
+  const values = { in: `${formatNumber(nitrogenIn, 2)} g`, out: `${formatNumber(nitrogenOut, 3)} g`, net: `${formatNumber(balance, 3)} g` };
+  for (const [key, value] of Object.entries(values)) {
+    const node = elements.advancedPanel.querySelector(`[data-balance="${key}"]`);
+    if (node) node.textContent = value;
+  }
 }
 
 function render() {
@@ -764,10 +880,16 @@ function refreshSlotCard(group, index) {
 
   if (badge) badge.textContent = product ? getUnitLabel(row.unit) : "未選択";
   if (metaNode) metaNode.textContent = meta;
+  const info = card.querySelector("[data-info]");
+  if (info) info.classList.toggle("hidden", !product);
   if (volume) volume.textContent = `${formatNumber(result.volumeMl, 0)} mL`;
   if (kcal) kcal.textContent = formatNumber(result.kcal, 1);
   if (protein) protein.textContent = `${formatNumber(result.protein, 1)} g`;
   if (inputArea) inputArea.classList.toggle("hidden", !product);
+  const metrics = card.querySelector("[data-metrics]");
+  if (metrics) metrics.classList.toggle("hidden", !product);
+  const electrolytes = card.querySelector('[data-cell="electrolytes"]');
+  if (electrolytes) electrolytes.innerHTML = renderRowElectrolytes(row, product);
 }
 
 function getRowsByGroup(group) {
@@ -794,13 +916,13 @@ document.addEventListener("input", (event) => {
 
   if (target.id === "urineVolume") {
     state.urineVolume = target.value;
-    renderSummaries();
+    refreshNitrogenBalanceValues();
     return;
   }
 
   if (target.id === "urineUN") {
     state.urineUN = target.value;
-    renderSummaries();
+    refreshNitrogenBalanceValues();
     return;
   }
 
@@ -814,6 +936,7 @@ document.addEventListener("input", (event) => {
   }
 
   rows[index][field] = target.value;
+  if (field === "productId" && !target.value) rows[index].amount = "";
 
   if (field === "productId" || field === "unit") {
     render();
@@ -840,6 +963,7 @@ document.addEventListener("change", (event) => {
   }
 
   rows[index][field] = target.value;
+  if (field === "productId" && !target.value) rows[index].amount = "";
   render();
 });
 

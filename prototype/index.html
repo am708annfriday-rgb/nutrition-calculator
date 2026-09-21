@@ -72,12 +72,15 @@
 
       <section class="group-panel">
         <div class="section-title">追加計算</div>
+        <div class="advanced-results">
+          <div id="npcnSummary"></div>
+          <div id="electrolyteSummary"></div>
+        </div>
         <div class="weight-card">
-          <label class="field-label" for="advancedMode">表示項目</label>
+          <label class="field-label" for="advancedMode">窒素バランス計算</label>
           <select id="advancedMode">
-            <option value="none">表示しない</option>
-            <option value="npcn">NPC/N</option>
-            <option value="nitrogen-balance">窒素バランス計算</option>
+            <option value="none">計算しない</option>
+            <option value="nitrogen-balance">表示する</option>
           </select>
         </div>
         <div id="advancedPanel"></div>
