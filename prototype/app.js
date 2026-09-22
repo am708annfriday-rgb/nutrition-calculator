@@ -70,6 +70,8 @@ const products = [
     packageMl: 1050, kcalPerMl: 1500 / 1050, useLabelEnergy: true,
     proteinPerMl: 32.847 / 1050, fatPerMl: 0, carbPerMl: 342.2 / 1050,
     nitrogenPerMl: 4.56 / 1050, npcPerMl: 1369 / 1050,
+    electrolytes: { sodiumMeqPerPackage: 50, potassiumMeqPerPackage: 0, chlorideMeqPerPackage: 40,
+      calciumMeqPerPackage: 6, magnesiumMeqPerPackage: 6, phosphorusMmolPerPackage: 0 },
     note: "添付文書：混合後1バッグ。タンパク量は総遊離アミノ酸量、窒素・非蛋白熱量は記載値"
   },
 
