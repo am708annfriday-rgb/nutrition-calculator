@@ -2,6 +2,7 @@
 
 | 登録製品 | 1規格 | kcal | タンパク質・アミノ酸 g | 脂質 g | 炭水化物 g |
 | --- | --- | ---: | ---: | ---: | ---: |
+| テルミールミニ | 125mL | 200 | 7.3 | 7.5 | 26.0 |
 | 明治リーナレンLP | 125mL | 200 | 2 | 5.6 | 36.6 |
 | 明治リーナレンLP Zパック400K | 250mL | 400 | 4 | 11.2 | 73.2 |
 | ハイネックスリニュート | 400mL | 400 | 24 | 22.4 | 28.4 |
@@ -12,6 +13,7 @@
 
 ## 出典
 
+- テルミールミニ：[ニュートリー公式製品ページ](https://www.nutri.co.jp/products/terumealmini/mini/index.html)。1本125mLあたりの栄養成分を採用。Naはコーンスープ味以外100mg（4.3mEq）、コーンスープ味175mg（7.6mEq）と異なるため2製品に分けた。K 100mg（2.6mEq）、Cl 150mg（4.2mEq）はメーカー記載のmEq値を採用。Ca 90mg、Mg 20mg、P 90mgは元素量から換算。
 - リーナレンLP：[明治製品ページ](https://www.meiji.co.jp/products/enteral_formula/49720167.html)、[メーカー組成表・PDF最終ページ](https://www.meiji.co.jp/meiji-nutrition-info/pdf/products/mhn/renalen/renalen300.pdf)。125mLと250mL規格を確認。
 - ハイネックスリニュート：[大塚製薬工場](https://www.otsukakj.jp/med_nutrition/archives/hinex/hinex_renute.php)。100kcal/100mLあたりの組成を400mLに換算。
 - アイソカル クリア：[メーカー製品ページ](https://www.nestlehealthscience.jp/brands/isocal-ons-liquid/isocal-clear)、[メーカー成分表](https://www.nestlehealthscience.jp/sites/default/files/2024-07/isocal-clear.pdf)。ピーチ・レモンティーは主要成分が同じ。「アイソカルピーチ」はクリアのピーチ風味として仮解釈し、独立した別製品は作成していない。
@@ -33,6 +35,7 @@
 
 | 製品 | 包装量 | 原表の掲載ページ | 原表の単位 |
 | --- | ---: | ---: | --- |
+| テルミールミニ（コーンスープ味以外／コーンスープ味） | 各125 mL | ニュートリー公式製品ページ | Na/K/Cl: mEq/本、Ca/Mg/P: mg/本。Naのみ味で異なる |
 | ペプタメンスタンダード、ペプタメンAF | 各200 mL | 88（PDF 11ページ） | Na/K/Cl/Ca/Mg/P: mg/包 |
 | キドパレン輸液 | 混合後1050 mL | 2026年5月改訂の添付文書（ユーザー提供PDF 1–2ページ） | Na 50、K 0、Cl 40、Ca 6、Mg 6 mEq/袋、P 0 mmol/袋。K・Pは8.3項の「含有しない」を根拠に0を登録 |
 | 明治リーナレンLP | 125、250 mL | 90（PDF 13ページ） | Na/K/Cl/Ca/Mg/P: mg/包 |

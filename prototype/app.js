@@ -24,6 +24,29 @@ function electrolytesFromPerLiter(values, packageMl) {
 }
 
 const products = [
+  // テルミールミニはコーンスープ味のみNa含有量が異なるため、選択肢を分ける。
+  {
+    id: "enteral-terumeal-mini-125", name: "テルミールミニ 125mL（コーンスープ味以外）", group: "EN",
+    packageMl: 125, kcalPerMl: 200 / 125, useLabelEnergy: true,
+    proteinPerMl: 7.3 / 125, fatPerMl: 7.5 / 125, carbPerMl: 26 / 125,
+    nitrogenPerMl: 7.3 / 6.25 / 125,
+    electrolytes: { sodiumMeqPerPackage: 4.3, potassiumMeqPerPackage: 2.6, chlorideMeqPerPackage: 4.2,
+      calciumMeqPerPackage: 90 * 2 / ATOMIC_WEIGHTS.calcium,
+      magnesiumMeqPerPackage: 20 * 2 / ATOMIC_WEIGHTS.magnesium,
+      phosphorusMmolPerPackage: 90 / ATOMIC_WEIGHTS.phosphorus },
+    note: "メーカー表示値。コーヒー・バナナ・麦茶味。窒素量はタンパク質÷6.25の推定値"
+  },
+  {
+    id: "enteral-terumeal-mini-corn-125", name: "テルミールミニ 125mL（コーンスープ味）", group: "EN",
+    packageMl: 125, kcalPerMl: 200 / 125, useLabelEnergy: true,
+    proteinPerMl: 7.3 / 125, fatPerMl: 7.5 / 125, carbPerMl: 26 / 125,
+    nitrogenPerMl: 7.3 / 6.25 / 125,
+    electrolytes: { sodiumMeqPerPackage: 7.6, potassiumMeqPerPackage: 2.6, chlorideMeqPerPackage: 4.2,
+      calciumMeqPerPackage: 90 * 2 / ATOMIC_WEIGHTS.calcium,
+      magnesiumMeqPerPackage: 20 * 2 / ATOMIC_WEIGHTS.magnesium,
+      phosphorusMmolPerPackage: 90 / ATOMIC_WEIGHTS.phosphorus },
+    note: "メーカー表示値。コーンスープ味はNa 175mg（7.6mEq）。窒素量はタンパク質÷6.25の推定値"
+  },
   // Verified additions: see PRODUCT_SOURCES.md (2026-09-15).
   {
     id: "enteral-renalen-lp-125", name: "明治リーナレンLP 125mL", group: "EN",
