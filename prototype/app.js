@@ -242,6 +242,20 @@ const products = [
     note: "濃度換算: 30g/100mL"
   },
   {
+    id: "pn-glyceol-200",
+    name: "グリセオール注 200mL",
+    group: "PN",
+    packageMl: 200,
+    kcalPerMl: 127.4 / 200,
+    useLabelEnergy: true,
+    proteinPerMl: 0,
+    fatPerMl: 0,
+    carbPerMl: 10 / 200,
+    nitrogenPerMl: 0,
+    electrolytes: { sodiumMeqPerPackage: 30.8, chlorideMeqPerPackage: 30.8 },
+    note: "200mL中 グリセリン20g・果糖10g・NaCl 1.8g。グリセリン由来熱量はPFC・糖質に含めない"
+  },
+  {
     id: "pn-physio-140-500",
     name: "フィジオ140輸液 500mL",
     group: "PN",
