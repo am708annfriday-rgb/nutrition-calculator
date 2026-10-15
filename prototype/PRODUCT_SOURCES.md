@@ -7,6 +7,7 @@
 | 明治リーナレンLP Zパック400K | 250mL | 400 | 4 | 11.2 | 73.2 |
 | ハイネックスリニュート | 400mL | 400 | 24 | 22.4 | 28.4 |
 | アイソカル クリア（ピーチ風味） | 200mL | 200 | 10 | 0 | 40 |
+| MA-ラクフィア1.0 | 200mL | 200 | 8.0 | 6.0 | 30 |
 | リーバクト配合顆粒 | 4.15g/包 | 16（換算） | 4（有効成分の合計） | 対象外 | 対象外 |
 | アミノレバンEN配合散 | 50g/包 | 213 | 13.5 | 対象外 | 対象外 |
 | キドパレン輸液 | 混合後1050mL | 1500 | 32.847（総遊離アミノ酸） | 0 | 342.2 |
@@ -17,6 +18,7 @@
 - リーナレンLP：[明治製品ページ](https://www.meiji.co.jp/products/enteral_formula/49720167.html)、[メーカー組成表・PDF最終ページ](https://www.meiji.co.jp/meiji-nutrition-info/pdf/products/mhn/renalen/renalen300.pdf)。125mLと250mL規格を確認。
 - ハイネックスリニュート：[大塚製薬工場](https://www.otsukakj.jp/med_nutrition/archives/hinex/hinex_renute.php)。100kcal/100mLあたりの組成を400mLに換算。
 - アイソカル クリア：[メーカー製品ページ](https://www.nestlehealthscience.jp/brands/isocal-ons-liquid/isocal-clear)、[メーカー成分表](https://www.nestlehealthscience.jp/sites/default/files/2024-07/isocal-clear.pdf)。ピーチ・レモンティーは主要成分が同じ。「アイソカルピーチ」はクリアのピーチ風味として仮解釈し、独立した別製品は作成していない。
+- MA-ラクフィア1.0：[森永乳業クリニコ公式製品ページ](https://www.clinico.co.jp/products/liquid-food/ma-l1.html)。1パック200mL当たり200kcal、たんぱく質8.0g、脂質6.0g、炭水化物30g。電解質は公式標準組成の100mL当たりの元素量を200mLに換算して登録。
 - リーバクト：[PMDA添付文書](https://www.pmda.go.jp/PmdaSearch/iyakuDetail/ResultDataSetPDF/111890_3253003D2031_2_06)。952mg＋1904mg＋1144mg＝4g。熱量は添付文書記載値ではなく、アミノ酸4g×4kcal/g＝16kcalとして換算（添加剤分を除く）。
 - アミノレバンEN：[PMDA添付文書](https://www.pmda.go.jp/PmdaSearch/iyakuDetail/ResultDataSetPDF/180078_3259108B1039_1_05)「参考」の蛋白質・総エネルギーを採用。
 - キドパレン：[PMDA添付文書](https://www.pmda.go.jp/PmdaSearch/iyakuDetail/ResultDataSetPDF/180079_3259538G1021_1_02)。総窒素4.56g、非蛋白熱量1369kcalも採用。
@@ -36,6 +38,7 @@
 | 製品 | 包装量 | 原表の掲載ページ | 原表の単位 |
 | --- | ---: | ---: | --- |
 | テルミールミニ（コーンスープ味以外／コーンスープ味） | 各125 mL | ニュートリー公式製品ページ | Na/K/Cl: mEq/本、Ca/Mg/P: mg/本。Naのみ味で異なる |
+| MA-ラクフィア1.0 | 200 mL | 森永乳業クリニコ公式製品ページ | Na/K/Cl/Ca/Mg/P: mg/本（100mL当たりの標準組成を200mLに換算） |
 | ペプタメンスタンダード、ペプタメンAF | 各200 mL | 88（PDF 11ページ） | Na/K/Cl/Ca/Mg/P: mg/包 |
 | キドパレン輸液 | 混合後1050 mL | 2026年5月改訂の添付文書（ユーザー提供PDF 1–2ページ） | Na 50、K 0、Cl 40、Ca 6、Mg 6 mEq/袋、P 0 mmol/袋。K・Pは8.3項の「含有しない」を根拠に0を登録 |
 | 明治リーナレンLP | 125、250 mL | 90（PDF 13ページ） | Na/K/Cl/Ca/Mg/P: mg/包 |

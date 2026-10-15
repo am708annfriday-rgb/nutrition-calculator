@@ -79,6 +79,14 @@ const products = [
     note: "メーカー表示値。レモンティー風味も同じ主要成分。窒素量はタンパク質÷6.25の推定値"
   },
   {
+    id: "enteral-ma-lacfia-1-0", name: "MA-ラクフィア1.0", group: "EN",
+    packageMl: 200, kcalPerMl: 1, useLabelEnergy: true,
+    proteinPerMl: 8 / 200, fatPerMl: 6 / 200, carbPerMl: 30 / 200,
+    nitrogenPerMl: 8 / 6.25 / 200,
+    electrolytes: electrolytesFromMg({ sodium: 394, potassium: 240, chloride: 220, calcium: 120, magnesium: 60, phosphorus: 120 }),
+    note: "メーカー標準組成。炭水化物は食物繊維を含む。窒素量はタンパク質÷6.25の推定値"
+  },
+  {
     id: "oral-livact", name: "リーバクト配合顆粒 4.15g/包", group: "ORAL",
     kcalPerPack: 16, proteinPerPack: 4,
     note: "アミノ酸4gをタンパク量として加算。16kcalは4g×4kcal/gの換算値（添加剤を除く）"
